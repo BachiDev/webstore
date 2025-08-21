@@ -1,8 +1,19 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
+// next.config.mjs or next.config.js
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   images: {
-    domains: ['www.gravatar.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'files.stripe.com',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.gravatar.com',
+        pathname: '**',
+      },
+    ],
   },
 };
 

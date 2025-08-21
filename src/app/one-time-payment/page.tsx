@@ -2,17 +2,23 @@
 
 import { payments } from '@/lib/firebase';
 import ProductCard from '../../components/ProductCard';
-import { getProducts } from "@invertase/firestore-stripe-payments";
-
-const products = await getProducts(payments, {
-  includePrices: true,
-  activeOnly: true,
-  where: [
-    ["metadata.firebaseRole", "==", "null"],
-  ]
-});
+import { getProducts, Product } from "@invertase/firestore-stripe-payments";
+import { useEffect, useState } from 'react';
 
 const OneTimePaymentPage = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const products = await getProducts(payments, {
+        includePrices: true,
+        activeOnly: true,
+      });
+      setProducts(products);
+    };
+    fetchProducts();
+  }, []);
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">One-Time Payment Products</h1>

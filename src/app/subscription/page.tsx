@@ -1,10 +1,32 @@
 'use client';
 
+import { payments } from '@/lib/firebase';
+import ProductCard from '../../components/ProductCard';
+import { getProducts, Product } from "@invertase/firestore-stripe-payments";
+import { useEffect, useState } from 'react';
+
 const SubscriptionPage = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const products = await getProducts(payments, {
+        includePrices: true,
+        activeOnly: true,
+      });
+      setProducts(products);
+    };
+    fetchProducts();
+  }, []);
+
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold">Subscription</h1>
-      <p>This is where the subscription payment form will go.</p>
+      <h1 className="text-2xl font-bold mb-4">Subscription Products</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        {products.map(product => (
+          <ProductCard key={product.id} {...product} />
+        ))}
+      </div>
     </div>
   );
 };
