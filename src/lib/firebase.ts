@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { initializeUI } from "@firebase-ui/core";
+import { getStripePayments } from "@invertase/firestore-stripe-payments";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDlx6CHU-i50nv_MYCRckoyNTwMtA6_pxk",
@@ -17,5 +18,9 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const firestore = getFirestore(app);
 const ui = initializeUI({ app });
+const payments = getStripePayments(app, {
+  productsCollection: "products",
+  customersCollection: "customers",
+});
 
-export { app, auth, firestore, ui};
+export { app, auth, firestore, ui, payments};

@@ -1,7 +1,16 @@
 'use client';
 
+import { payments } from '@/lib/firebase';
 import ProductCard from '../../components/ProductCard';
-import { products } from '../../lib/products';
+import { getProducts } from "@invertase/firestore-stripe-payments";
+
+const products = await getProducts(payments, {
+  includePrices: true,
+  activeOnly: true,
+  where: [
+    ["metadata.firebaseRole", "==", "null"],
+  ]
+});
 
 const OneTimePaymentPage = () => {
   return (

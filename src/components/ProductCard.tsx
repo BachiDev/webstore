@@ -9,7 +9,7 @@ interface ProductCardProps {
   imageUrl: string;
 }
 
-const ProductCard = ({ id, name, description, price, imageUrl }: ProductCardProps) => {
+const ProductCard = ({ id, name, description, price }: ProductCardProps) => {
   return (
     <Link href={`/products/${id}`}>
       <div className="max-w-sm rounded-lg overflow-hidden shadow-lg bg-neutral-900 hover:bg-neutral-700 cursor-pointer">

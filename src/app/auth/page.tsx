@@ -64,7 +64,7 @@ onClick={handleGuestLogin}
         <button
           onClick={() => handleToggleView('signUp')}
           className={`px-4 py-2 rounded-lg font-semibold transition-colors duration-200 cursor-pointer ${
-           view === 'signUp' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+           view === 'signUp' ? 'bg-black text-white' : 'bg-gray-200 text-gray-800 hover:bg-gray-300 '
           }`}
         >
           Sign Up
