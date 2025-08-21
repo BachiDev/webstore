@@ -31,8 +31,8 @@ const ProfilePage = () => {
 
   useEffect(() => {
     const fetchPayments = async () => {
-      const payments = await getCurrentUserPayments(payments);
-      setUserPayments(payments);
+      const fetchedPayments = await getCurrentUserPayments(payments);
+      setUserPayments(fetchedPayments);
     };
     if (user) {
       fetchPayments();
@@ -63,7 +63,7 @@ const ProfilePage = () => {
         <p>Please log in to view your profile.</p>
       )}
       {subscriptions.length > 0 && <SubscriptionsTable subscriptions={subscriptions} />}
-      {payments.length > 0 && <PaymentsTable payments={payments} />}
+      {userPayments.length > 0 && <PaymentsTable payments={userPayments} />}
     </div>
   );
 };
