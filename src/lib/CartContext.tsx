@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import toast from 'react-hot-toast';
 
 interface CartItem {
   priceId: string;
@@ -46,6 +47,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         return [...prevItems, { priceId, quantity }];
       }
     });
+    toast.success(`Added ${quantity} item(s) to cart!`);
   };
 
   const removeFromCart = (priceId: string) => {
