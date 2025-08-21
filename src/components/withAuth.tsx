@@ -3,9 +3,10 @@
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useUser } from '../lib/UserContext';
+import type { ComponentType, FC } from 'react';
 
-const withAuth = (Component: React.ComponentType) => {
-  const AuthComponent = (props: any) => {
+const withAuth = <P extends object>(WrappedComponent: ComponentType<P>): FC<P> => {
+  const WithAuthComponent: FC<P> = (props) => {
     const { user, loading } = useUser();
     const router = useRouter();
 
@@ -15,14 +16,20 @@ const withAuth = (Component: React.ComponentType) => {
       }
     }, [user, loading, router]);
 
-    if (loading || !user) {
-      return <div className="flex min-h-screen items-center justify-center">Loading...</div>; // Or a loading spinner
+    if (loading) {
+      return <div>Loading...</div>; // Or a spinner component
     }
 
-    return <Component {...props} />;
+    if (!user) {
+      return null; // Or a redirect component
+    }
+
+    return <WrappedComponent {...props} />;
   };
 
-  return AuthComponent;
+  WithAuthComponent.displayName = `withAuth(${(WrappedComponent.displayName || WrappedComponent.name || 'Component')})`;
+
+  return WithAuthComponent;
 };
 
 export default withAuth;

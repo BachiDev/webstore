@@ -11,11 +11,12 @@ interface NavItem {
   label: string;
   authRequired?: boolean;
   guestOnly?: boolean;
+  roleRequired?: boolean;
 }
 
 const navItems: NavItem[] = [
   { href: "/one-time-payment", label: "One-Time Payment" },
-  { href: "/subscription", label: "Subscription" },
+  { href: "/subscription", label: "Subscription"},
 ];
 
 const NavLink = ({ href, children, onClick, className = "" }: { href: string; children: React.ReactNode; onClick?: () => void; className?: string }) => (
@@ -38,10 +39,17 @@ const LoginButton = ({ onClick }: { onClick?: () => void }) => (
 );
 
 const Navbar = () => {
-  const { user, loading } = useUser();
+  const { user, loading, role } = useUser();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
+
+  const filteredNavItems = navItems.filter(item => {
+    if (item.authRequired && !user) return false;
+    if (item.guestOnly && user) return false;
+    if (item.roleRequired && !role) return false;
+    return true;
+  });
 
   return (
     <nav className="bg-gray-900 text-white p-4">
@@ -51,7 +59,7 @@ const Navbar = () => {
           <span>WebStore</span>
         </NavLink>
         <div className="hidden md:flex space-x-4 items-center">
-          {navItems.map(item => (
+          {filteredNavItems.map(item => (
             <NavLink key={item.href} href={item.href}>{item.label}</NavLink>
           ))}
           {loading ? (
@@ -75,7 +83,7 @@ const Navbar = () => {
       </div>
       {isOpen && (
         <div className="md:hidden mt-4">
-          {navItems.map(item => (
+          {filteredNavItems.map(item => (
             <NavLink key={item.href} href={item.href} onClick={toggleMenu} className="block py-2 px-4 hover:bg-gray-700">{item.label}</NavLink>
           ))}
           {loading ? (
