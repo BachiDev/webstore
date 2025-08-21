@@ -2,6 +2,7 @@
 
 import { auth, payments } from '../../lib/firebase';
 import { signOut } from 'firebase/auth';
+import { getFunctions, httpsCallable } from 'firebase/functions';
 import { useRouter } from 'next/navigation';
 import { useUser } from '../../lib/UserContext';
 import Image from 'next/image';
@@ -23,6 +24,7 @@ const ProfilePage = () => {
         status: 'active',
       });
       setSubscriptions(subscriptions);
+      console.log("Fetched subscriptions:", subscriptions);
     };
     if (user) {
       fetchSubscriptions();
@@ -33,6 +35,7 @@ const ProfilePage = () => {
     const fetchPayments = async () => {
       const fetchedPayments = await getCurrentUserPayments(payments);
       setUserPayments(fetchedPayments);
+      console.log("Fetched payments:", fetchedPayments);
     };
     if (user) {
       fetchPayments();
@@ -49,6 +52,18 @@ const ProfilePage = () => {
     }
   };
 
+  const handleManageSubscription = async () => {
+    try {
+      const functions = getFunctions(undefined, 'europe-west3');
+      const createPortalLink = httpsCallable(functions, 'ext-firestore-stripe-payments-createPortalLink');
+      const { data } = await createPortalLink({ returnUrl: window.location.origin});
+      const { url } = data as { url: string };
+      router.push(url);
+    } catch (error) {
+      console.error("Error managing subscription:", error);
+    }
+  };
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Profile</h1>
@@ -57,7 +72,10 @@ const ProfilePage = () => {
           <Image src={user.photoURL || 'https://www.gravatar.com/avatar/?d=mp'} alt="Profile" width={96} height={96} className="rounded-full mb-4" />
           <p className="text-lg mb-2 text-black">Email: {user.email || 'N/A'}</p>
           <p className="text-lg mb-4 text-black">UID: {user.uid}</p>
-          <button onClick={handleLogout} className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 cursor-pointer">Logout</button>
+          <div className="flex space-x-4">
+            <button onClick={handleManageSubscription} className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer">Manage Subscription</button>
+            <button onClick={handleLogout} className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 cursor-pointer">Logout</button>
+          </div>
         </div>
       ) : (
         <p>Please log in to view your profile.</p>
