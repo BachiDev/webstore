@@ -17,6 +17,7 @@ const ProfilePage = () => {
   const { user } = useUser();
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [userPayments, setUserPayments] = useState<Payment[]>([]);
+  const [isLoadingPortal, setIsLoadingPortal] = useState(false);
 
   useEffect(() => {
     const fetchSubscriptions = async () => {
@@ -53,14 +54,17 @@ const ProfilePage = () => {
   };
 
   const handleManageSubscription = async () => {
+    setIsLoadingPortal(true);
     try {
       const functions = getFunctions(undefined, 'europe-west3');
       const createPortalLink = httpsCallable(functions, 'ext-firestore-stripe-payments-createPortalLink');
-      const { data } = await createPortalLink({ returnUrl: window.location.origin});
+      const { data } = await createPortalLink({ returnUrl: window.location.origin + '/profile'});
       const { url } = data as { url: string };
       router.push(url);
     } catch (error) {
       console.error("Error managing subscription:", error);
+    } finally {
+      setIsLoadingPortal(false);
     }
   };
 
@@ -73,7 +77,9 @@ const ProfilePage = () => {
           <p className="text-lg mb-2 text-black">Email: {user.email || 'N/A'}</p>
           <p className="text-lg mb-4 text-black">UID: {user.uid}</p>
           <div className="flex space-x-4">
-            <button onClick={handleManageSubscription} className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer">Manage Subscription</button>
+            <button onClick={handleManageSubscription} disabled={isLoadingPortal} className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+              {isLoadingPortal ? 'Loading...' : 'Manage Subscription'}
+            </button>
             <button onClick={handleLogout} className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 cursor-pointer">Logout</button>
           </div>
         </div>
