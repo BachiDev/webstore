@@ -19,12 +19,12 @@ export default function Home() {
         <p className="text-lg mb-8 text-black">Here&apos;s what you can do:</p>
       </div>
       <div className="flex flex-wrap justify-center gap-8">
-        <Link href="/one-time-payment">
+        <Link href="/store">
          <div className="max-w-sm rounded-lg overflow-hidden shadow-lg bg-neutral-900 hover:bg-neutral-700 cursor-pointer text-center">
             <div className="px-6 py-4">
-              <div className="font-bold text-xl mb-2">One-Time Payment</div>
+              <div className="font-bold text-xl mb-2">One-Time Payments</div>
               <p className="text-gray-400 text-base">
-                Make a one-time purchase.
+                Make a purchase in the store.
               </p>
             </div>
           </div>
@@ -33,7 +33,7 @@ export default function Home() {
           <Link href="/subscription">
             <div className="max-w-sm rounded-lg overflow-hidden shadow-lg bg-neutral-900 hover:bg-neutral-700 cursor-pointer text-center"> 
               <div className="px-6 py-4">
-                <div className="font-bold text-xl mb-2">Subscription</div>
+                <div className="font-bold text-xl mb-2">Recurring Payments</div>
                 <p className="text-gray-400 text-base">
                   Purchase a subscription.
                 </p>

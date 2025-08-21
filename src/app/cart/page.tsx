@@ -69,23 +69,29 @@ const CartPage = () => {
       ) : (
         <div>
           <div className="space-y-4">
-            {cartProducts.map(product => (
-              <div key={product.id} className="flex items-center justify-between border p-4 rounded-lg bg-neutral-900 text-white">
-                <div className="flex items-center space-x-4">
-                  {product.images && product.images[0] && (
-                    <img src={product.images[0]} alt={product.name!} className="w-16 h-16 object-cover rounded" />
-                  )}
-                  <div>
-                    <h2 className="text-lg font-bold">{product.name}</h2>
-                    <p className="text-gray-400">Quantity: {product.quantity}</p>
-                    <p className="text-gray-400">€ {(product.price.unit_amount! / 100).toFixed(2)} each</p>
+            {cartProducts.map(product => {
+              const itemTotal = (product.price.unit_amount! / 100) * product.quantity;
+              return (
+                <div key={product.id} className="flex flex-col md:flex-row items-center justify-between border p-4 rounded-lg bg-neutral-900 text-white">
+                  <div className="flex items-center space-x-4 mb-4 md:mb-0">
+                    {product.images && product.images[0] && (
+                      <img src={product.images[0]} alt={product.name!} className="w-20 h-20 object-cover rounded" />
+                    )}
+                    <div>
+                      <h2 className="text-lg font-bold">{product.name}</h2>
+                      <p className="text-gray-400">Quantity: {product.quantity}</p>
+                      <p className="text-gray-400">Unit Price: € {(product.price.unit_amount! / 100).toFixed(2)}</p>
+                    </div>
+                  </div>
+                  <div className="flex flex-col md:flex-row items-center space-x-4">
+                    <p className="text-lg font-bold mb-4 md:mb-0">Item Total: € {itemTotal.toFixed(2)}</p>
+                    <button onClick={() => removeFromCart(product.price.id)} className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded cursor-pointer">
+                      Remove
+                    </button>
                   </div>
                 </div>
-                <button onClick={() => removeFromCart(product.price.id)} className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded cursor-pointer">
-                  Remove
-                </button>
-              </div>
-            ))}
+              );
+            })}
           </div>
           <div className="mt-8 text-right">
             <h2 className="text-xl font-bold text-black">Total: € {total.toFixed(2)}</h2>

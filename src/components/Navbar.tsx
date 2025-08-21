@@ -16,7 +16,7 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { href: "/one-time-payment", label: "One-Time Payment" },
+  { href: "/store", label: "Store" },
   { href: "/subscription", label: "Subscription"},
 ];
 

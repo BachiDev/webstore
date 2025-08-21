@@ -5,7 +5,7 @@ import ProductCard from '../../components/ProductCard';
 import { getProducts, Product } from "@invertase/firestore-stripe-payments";
 import { useEffect, useState } from 'react';
 
-const OneTimePaymentPage = () => {
+const StorePage = () => {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
@@ -22,7 +22,7 @@ const OneTimePaymentPage = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4 text-black">One-Time Payment Products</h1>
+      <h1 className="text-2xl font-bold mb-4 text-black">Store</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
         {products.map(product => (
           <ProductCard key={product.id} {...product} />
@@ -32,4 +32,4 @@ const OneTimePaymentPage = () => {
   );
 };
 
-export default OneTimePaymentPage;
+export default StorePage;
