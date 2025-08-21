@@ -12,6 +12,7 @@ interface CartContextType {
   cartItems: CartItem[];
   addToCart: (priceId: string, quantity?: number) => void;
   removeFromCart: (priceId: string) => void;
+  updateQuantity: (priceId: string, newQuantity: number) => void;
   clearCart: () => void;
   getCartTotal: () => number;
 }
@@ -52,10 +53,24 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const removeFromCart = (priceId: string) => {
     setCartItems(prevItems => prevItems.filter(item => item.priceId !== priceId));
+    toast.success('Item removed from cart!');
   };
 
   const clearCart = () => {
     setCartItems([]);
+    toast.success('Cart cleared!');
+  };
+
+  const updateQuantity = (priceId: string, newQuantity: number) => {
+    setCartItems(prevItems => {
+      if (newQuantity <= 0) {
+        toast.success('Item removed from cart!');
+        return prevItems.filter(item => item.priceId !== priceId);
+      }
+      return prevItems.map(item =>
+        item.priceId === priceId ? { ...item, quantity: newQuantity } : item
+      );
+    });
   };
 
   const getCartTotal = () => {
@@ -64,7 +79,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, clearCart, getCartTotal }}>
+    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, updateQuantity, clearCart, getCartTotal }}>
       {children}
     </CartContext.Provider>
   );

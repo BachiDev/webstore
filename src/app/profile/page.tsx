@@ -8,6 +8,7 @@ import { useUser } from '../../lib/UserContext';
 import Image from 'next/image';
 import withAuth from '../../components/withAuth';
 import { getCurrentUserSubscriptions, getCurrentUserPayments, Payment, Subscription } from '@invertase/firestore-stripe-payments';
+import toast from 'react-hot-toast';
 import { useEffect, useState } from 'react';
 import PaymentsTable from '../../components/PaymentsTable';
 import SubscriptionsTable from '../../components/SubscriptionsTable';
@@ -47,6 +48,7 @@ const ProfilePage = () => {
     try {
       localStorage.setItem('logged_out', 'true');
       await signOut(auth);
+      toast.success('Logged out successfully!');
       router.push('/'); // Redirect to home page after logout
     } catch (error) {
       console.error("Error logging out:", error);

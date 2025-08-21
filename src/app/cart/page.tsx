@@ -12,9 +12,10 @@ interface CartProduct extends Product {
 }
 
 const CartPage = () => {
-  const { cartItems, removeFromCart, clearCart } = useCart();
+  const { cartItems, removeFromCart, clearCart, updateQuantity } = useCart();
   const [cartProducts, setCartProducts] = useState<CartProduct[]>([]);
   const [total, setTotal] = useState(0);
+  const [isProcessingCheckout, setIsProcessingCheckout] = useState(false);
 
   useEffect(() => {
     const fetchCartProducts = async () => {
@@ -57,8 +58,16 @@ const CartPage = () => {
   const handleCheckout = async () => {
     if (cartProducts.length === 0) return;
 
-    const checkoutItems = cartProducts.map(p => ({ price: p.price.id, quantity: p.quantity }));
-    await createCartCheckout(checkoutItems);
+    setIsProcessingCheckout(true);
+    try {
+      const checkoutItems = cartProducts.map(p => ({ price: p.price.id, quantity: p.quantity }));
+      await createCartCheckout(checkoutItems);
+      clearCart(); // Clear cart after successful checkout initiation
+    } catch (error) {
+      console.error("Error during checkout:", error);
+    } finally {
+      setIsProcessingCheckout(false);
+    }
   };
 
   return (
@@ -79,8 +88,24 @@ const CartPage = () => {
                     )}
                     <div>
                       <h2 className="text-lg font-bold">{product.name}</h2>
-                      <p className="text-gray-400">Quantity: {product.quantity}</p>
                       <p className="text-gray-400">Unit Price: € {(product.price.unit_amount! / 100).toFixed(2)}</p>
+                      <div className="flex items-center space-x-2 mt-2">
+                        <label htmlFor={`quantity-${product.id}`} className="text-gray-400">Quantity:</label>
+                        <input
+                          id={`quantity-${product.id}`}
+                          type="number"
+                          min="1"
+                          max="99"
+                          value={product.quantity}
+                          onChange={(e) => {
+                            const value = Number(e.target.value);
+                            if (value >= 1 && value <= 99) {
+                              updateQuantity(product.price.id, value);
+                            }
+                          }}
+                          className="w-16 p-2 border rounded text-white bg-neutral-800"
+                        />
+                      </div>
                     </div>
                   </div>
                   <div className="flex flex-col md:flex-row items-center space-x-4">
@@ -95,8 +120,8 @@ const CartPage = () => {
           </div>
           <div className="mt-8 text-right">
             <h2 className="text-xl font-bold text-black">Total: € {total.toFixed(2)}</h2>
-            <button onClick={handleCheckout} className="bg-green-600 hover:bg-green-700 text-white py-2 px-6 rounded-lg mt-4 cursor-pointer">
-              Proceed to Checkout
+            <button onClick={handleCheckout} disabled={isProcessingCheckout || cartProducts.length === 0} className="bg-green-600 hover:bg-green-700 text-white py-2 px-6 rounded-lg mt-4 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+              {isProcessingCheckout ? 'Please wait...' : 'Proceed to Checkout'}
             </button>
             <button onClick={clearCart} className="bg-gray-600 hover:bg-gray-700 text-white py-2 px-6 rounded-lg mt-4 ml-4 cursor-pointer">
               Clear Cart

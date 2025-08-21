@@ -12,6 +12,7 @@ export const createCheckout = async (priceId: string) => {
 
 export const createCartCheckout = async (line_items: { price: string; quantity?: number }[]) => {
   const sessionId = await createCheckoutSession(payments, {
+    mode: 'payment',
     line_items: line_items,
     success_url: `${window.location.origin}/profile`,
     cancel_url: window.location.origin,
