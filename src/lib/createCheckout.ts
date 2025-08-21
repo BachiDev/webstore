@@ -9,3 +9,12 @@ export const createCheckout = async (priceId: string) => {
   });
   window.location.assign(sessionId.url);
 };
+
+export const createCartCheckout = async (line_items: { price: string; quantity?: number }[]) => {
+  const sessionId = await createCheckoutSession(payments, {
+    line_items: line_items,
+    success_url: `${window.location.origin}/profile`,
+    cancel_url: window.location.origin,
+  });
+  window.location.assign(sessionId.url);
+};
