@@ -19,8 +19,8 @@ const ProductCard = ({ name, description, images, prices }: Product) => {
       <div className="px-6 py-4">
         {prices?.filter(price => price.active).map((price: Price) => (
           <div key={price.id} className="flex justify-between items-center">
-            <p className="text-white text-lg font-bold">${price.unit_amount! / 100}</p>
-            <button onClick={() => handleCheckout(price.id)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            <p className="text-white text-lg font-bold">€ {(price.unit_amount! / 100).toFixed(2)}</p>
+            <button onClick={() => handleCheckout(price.id)} className="bg-white hover:bg-neutral-300 text-black font-bold py-2 px-4 rounded mt-4 cursor-pointer">
               Buy Now
             </button>
           </div>

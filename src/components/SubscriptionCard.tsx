@@ -24,7 +24,7 @@ const SubscriptionCard = ({ product, billingInterval }: { product: Product, bill
         {billingInterval === "year" && yearlyPrice && (
           <div className="text-center">
             <p className="text-white text-lg font-bold">€ {yearlyPrice.unit_amount! / 100} / year</p>
-            <button onClick={() => handleCheckout(yearlyPrice.id)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
+            <button onClick={() => handleCheckout(yearlyPrice.id)} className="bg-white hover:bg-neutral-300 text-black font-bold py-2 px-4 rounded mt-4 cursor-pointer">
               Buy Now
             </button>
           </div>
@@ -32,7 +32,7 @@ const SubscriptionCard = ({ product, billingInterval }: { product: Product, bill
         {billingInterval === "month" && monthlyPrice && (
           <div className="text-center">
             <p className="text-white text-lg font-bold">${monthlyPrice.unit_amount! / 100} / month</p>
-            <button onClick={() => handleCheckout(monthlyPrice.id)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
+            <button onClick={() => handleCheckout(monthlyPrice.id)} className="bg-white hover:bg-neutral-300 text-black font-bold py-2 px-4 rounded mt-4 cursor-pointer">
               Buy Now
             </button>
           </div>
