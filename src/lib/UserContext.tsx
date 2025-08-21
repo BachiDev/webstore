@@ -1,9 +1,7 @@
 // src/lib/UserContext.tsx
-'use client';
-
 import { createContext, useContext, useState, useEffect } from 'react';
-import { onAuthStateChanged, signInAnonymously } from 'firebase/auth';
-import { auth, payments } from './firebase'; // Your Firebase auth instance
+import { onAuthStateChanged} from 'firebase/auth';
+import { auth, payments } from './firebase';
 import type { User } from 'firebase/auth';
 import { getCurrentUserSubscriptions } from '@invertase/firestore-stripe-payments';
 
@@ -20,33 +18,32 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const [role, setRole] = useState<string | null>(null);
 
-  useEffect(() => {
+   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (authUser) => {
-      if (!authUser && localStorage.getItem('logged_out') !== 'true') {
-        signInAnonymously(auth)
-          .then(() => {
-            console.log("Signed in anonymously!");
-          })
-          .catch((error) => {
-            console.error("Anonymous sign-in failed:", error);
-          });
-      } else {
-        // Clear the flag after a successful sign-in
-        if (authUser) {
-          localStorage.removeItem('logged_out');
-          const subscriptions = await getCurrentUserSubscriptions(payments, {
-            status: 'active',
-          });
-          if (subscriptions.length > 0) {
-            setRole(subscriptions[0].role);
-          }
+      // The autoAnonymousLogin behavior handles the initial sign-in.
+      // We no longer need to call signInAnonymously() here.
+
+      // If a user exists (anonymous or permanent), fetch their data.
+      if (authUser) {
+        localStorage.removeItem('logged_out');
+        
+        const subscriptions = await getCurrentUserSubscriptions(payments, {
+          status: 'active',
+        });
+
+        if (subscriptions.length > 0) {
+          setRole(subscriptions[0].role);
+        } else {
+          setRole(null); // Clear role if no active subscriptions
         }
-        setUser(authUser);
-        setLoading(false);
       }
+
+      setUser(authUser);
+      setLoading(false);
     });
+
     return () => unsubscribe();
-  }, []);
+  }, []); // Keep the empty dependency array
 
   return (
     <UserContext.Provider value={{ user, loading, role }}>

@@ -4,7 +4,8 @@ import { useCart } from '../../lib/CartContext';
 import { useEffect, useState } from 'react';
 import { getProducts, Product, Price } from '@invertase/firestore-stripe-payments';
 import { payments } from '@/lib/firebase';
-import { createCheckout, createCartCheckout } from '@/lib/createCheckout';
+import { createCartCheckout } from '@/lib/createCheckout';
+import PaymentNotice from '../../components/PaymentNotice';
 
 interface CartProduct extends Product {
   price: Price;
@@ -72,6 +73,7 @@ const CartPage = () => {
 
   return (
     <div className="container mx-auto p-4">
+      <PaymentNotice />
       <h1 className="text-2xl font-bold mb-4 text-black">Your Cart</h1>
       {cartItems.length === 0 ? (
         <p className="text-black">Your cart is empty.</p>

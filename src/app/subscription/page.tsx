@@ -4,6 +4,7 @@ import { payments } from '@/lib/firebase';
 import SubscriptionCard from '../../components/SubscriptionCard';
 import { getProducts, Product } from "@invertase/firestore-stripe-payments";
 import { useEffect, useState } from 'react';
+import PaymentNotice from '../../components/PaymentNotice';
 
 const SubscriptionPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -28,6 +29,7 @@ const SubscriptionPage = () => {
 
   return (
     <div className="container mx-auto p-4">
+      <PaymentNotice />
       <h1 className="text-2xl font-bold mb-4 text-black">Subscription Products</h1>
       <div className="flex justify-center items-center mb-4">
         <button onClick={() => setBillingInterval("year")} className={`px-4 py-2 rounded-l-md cursor-pointer ${billingInterval === "year" ? "bg-black text-white" : "bg-neutral-400"}`}>Yearly</button>

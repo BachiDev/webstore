@@ -12,6 +12,7 @@ import toast from 'react-hot-toast';
 import { useEffect, useState } from 'react';
 import PaymentsTable from '../../components/PaymentsTable';
 import SubscriptionsTable from '../../components/SubscriptionsTable';
+import { SignUpAuthScreen } from '@firebase-ui/react';
 
 const ProfilePage = () => {
   const router = useRouter();
@@ -73,6 +74,7 @@ const ProfilePage = () => {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Profile</h1>
+      
       {user ? (
         <div className="flex flex-col items-center">
           <Image src={user.photoURL || 'https://www.gravatar.com/avatar/?d=mp'} alt="Profile" width={96} height={96} className="rounded-full mb-4" />
@@ -80,14 +82,15 @@ const ProfilePage = () => {
           <p className="text-lg mb-4 text-black">UID: {user.uid}</p>
           <div className="flex space-x-4">
             <button onClick={handleManageSubscription} disabled={isLoadingPortal} className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
-              {isLoadingPortal ? 'Loading...' : 'Manage Subscription'}
+              {isLoadingPortal ? 'Loading...' : 'Customer Portal'}
             </button>
             <button onClick={handleLogout} className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 cursor-pointer">Logout</button>
           </div>
-        </div>
+        </div>        
       ) : (
         <p>Please log in to view your profile.</p>
       )}
+     <SignUpAuthScreen />
       {subscriptions.length > 0 && <SubscriptionsTable subscriptions={subscriptions} />}
       {userPayments.length > 0 && <PaymentsTable payments={userPayments} />}
     </div>

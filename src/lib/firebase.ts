@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-import { initializeUI } from "@firebase-ui/core";
+import { autoAnonymousLogin, autoUpgradeAnonymousUsers, initializeUI } from "@firebase-ui/core";
 import { getStripePayments } from "@invertase/firestore-stripe-payments";
 
 const firebaseConfig = {
@@ -17,7 +17,12 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const firestore = getFirestore(app);
-const ui = initializeUI({ app });
+const ui = initializeUI({ app, 
+  behaviors: [
+    autoAnonymousLogin(),
+    autoUpgradeAnonymousUsers() 
+  ]
+});
 const payments = getStripePayments(app, {
   productsCollection: "products",
   customersCollection: "customers",

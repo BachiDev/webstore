@@ -1,7 +1,6 @@
+"use client";
 
-'use client';
-
-import { Payment } from '@invertase/firestore-stripe-payments';
+import { Payment } from "@invertase/firestore-stripe-payments";
 
 interface PaymentsTableProps {
   payments: Payment[];
@@ -20,10 +19,15 @@ const PaymentsTable = ({ payments }: PaymentsTableProps) => {
           </tr>
         </thead>
         <tbody>
-          {payments.map(payment => (
+          {payments.filter((payment) => payment.amount && payment.created).map((payment) => (
             <tr key={payment.id}>
-              <td className="p-2 border">{new Date(payment.created).toLocaleDateString()}</td>
-              <td className="p-2 border">{(payment.amount / 100).toFixed(2)} {payment.currency.toUpperCase()}</td>
+              <td className="p-2 border">
+                {new Date(payment.created).toLocaleDateString()}
+              </td>
+              <td className="p-2 border">
+                {(payment.amount / 100).toFixed(2)}{" "}
+                {payment.currency?.toUpperCase() || ""}
+              </td>
               <td className="p-2 border">{payment.status}</td>
             </tr>
           ))}
