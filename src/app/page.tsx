@@ -1,35 +1,46 @@
 'use client';
 
 import Link from 'next/link';
+import { useUser } from '../lib/UserContext';
 
 export default function Home() {
+  const { user } = useUser();
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24">
       <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to the Demo WebStore</h1>
-        <p className="text-lg mb-8">This is a demo webstore with simulated payments. You can test the one-time payment functionality without signing in. To test the subscription functionality, you will need to sign in.</p>
+        <h1 className="text-4xl font-bold mb-4 text-black">Welcome to the Demo WebStore</h1>
+        <p className="text-lg mb-8 text-black">This is a demo webstore with secure simulated Stripe payments.</p>
+        {user ? (
+          <p className="text-lg mb-8 text-black">You are automatically signed in as Guest. You can <Link href="/profile" className="text-blue-500 hover:underline">link your Email account</Link> to persist your data.</p>
+        ) : (
+          <p className="text-lg mb-8 text-black">You need to be <Link href="/auth" className="text-blue-500 hover:underline">logged in</Link> (as Guest) to purchase subscriptions. </p> 
+        )}
+        <p className="text-lg mb-8 text-black">Here&apos;s what you can do:</p>
       </div>
       <div className="flex flex-wrap justify-center gap-8">
         <Link href="/one-time-payment">
-          <div className="max-w-sm rounded-lg overflow-hidden shadow-lg bg-gray-800 hover:bg-gray-700 cursor-pointer">
+         <div className="max-w-sm rounded-lg overflow-hidden shadow-lg bg-neutral-900 hover:bg-neutral-700 cursor-pointer text-center">
             <div className="px-6 py-4">
               <div className="font-bold text-xl mb-2">One-Time Payment</div>
               <p className="text-gray-400 text-base">
-                Make a one-time purchase without signing in.
+                Make a one-time purchase.
               </p>
             </div>
           </div>
         </Link>
-        <Link href="/subscription">
-          <div className="max-w-sm rounded-lg overflow-hidden shadow-lg bg-gray-800 hover:bg-gray-700 cursor-pointer">
-            <div className="px-6 py-4">
-              <div className="font-bold text-xl mb-2">Subscription</div>
-              <p className="text-gray-400 text-base">
-                Sign in to purchase a subscription.
-              </p>
+        {user && (
+          <Link href="/subscription">
+            <div className="max-w-sm rounded-lg overflow-hidden shadow-lg bg-neutral-900 hover:bg-neutral-700 cursor-pointer text-center"> 
+              <div className="px-6 py-4">
+                <div className="font-bold text-xl mb-2">Subscription</div>
+                <p className="text-gray-400 text-base">
+                  Purchase a subscription.
+                </p>
+              </div>
             </div>
-          </div>
-        </Link>
+          </Link>
+        )}
       </div>
     </main>
   );

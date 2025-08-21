@@ -1,73 +1,83 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { auth } from '../../lib/firebase';
-import { GoogleAuthProvider, EmailAuthProvider, signInAnonymously } from 'firebase/auth';
-import 'firebaseui/dist/firebaseui.css';
-
-import type { auth as firebaseAuth } from 'firebaseui';
+import { useState, useEffect } from 'react';
+import {
+  SignInAuthScreen,
+  SignUpAuthScreen,
+} from '@firebase-ui/react';
+import { useRouter } from 'next/navigation';
+import { onAuthStateChanged, signInAnonymously } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
+import withGuest from '../../components/withGuest';
 
 const AuthPage = () => {
-  const [firebaseui, setFirebaseui] = useState<{
-    auth: typeof firebaseAuth;
-  } | null>(null);
+  const router = useRouter();
+  const [view, setView] = useState<'signIn' | 'signUp'>('signIn');
 
   useEffect(() => {
-    // Dynamically import FirebaseUI only on the client side
-    import('firebaseui').then(ui => {
-      setFirebaseui(ui);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("User logged in. UID:", user.uid);
+        router.push('/profile');
+      } else {
+        console.log("No user is logged in.");
+      }
     });
-  }, []);
-
-  useEffect(() => {
-    if (firebaseui) {
-      // Get an instance of the FirebaseUI Auth widget
-      const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(auth);
-
-      // Start the FirebaseUI widget
-      ui.start('#firebaseui-auth-container', {
-        signInOptions: [
-          // List of providers for the main UI
-          GoogleAuthProvider.PROVIDER_ID,
-          EmailAuthProvider.PROVIDER_ID
-        ],
-        signInFlow: 'popup',
-        callbacks: {
-          signInSuccessWithAuthResult: function (authResult) {
-            // This is the callback for successful logins
-            // You can add your custom logic here (e.g., redirect to dashboard)
-            return true; // Return true to redirect to signInSuccessUrl or false to prevent it
-          },
-          uiShown: function () {
-            // Hide the loader when the UI widget is displayed
-            const loader = document.getElementById('loader');
-            if (loader) {
-              loader.style.display = 'none';
-            }
-          },
-        },
-      });
-    }
-  }, [firebaseui]);
+    return () => unsubscribe();
+  }, [router]);
 
   const handleGuestLogin = async () => {
     try {
-      // Use the core Firebase SDK function for anonymous sign-in
       await signInAnonymously(auth);
     } catch (error) {
-      console.error('Error signing in anonymously:', error);
+      console.error("Error during anonymous sign-in:", error);
     }
+  };
+
+  const handleToggleView = (newView: 'signIn' | 'signUp') => {
+    setView(newView);
   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <h1 className="text-3xl font-bold mb-8">Login</h1>
-      <p className='mb-8'>(for the Demo as Guest is totally fine)</p>
-      <button onClick={handleGuestLogin} className="mt-4 px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">Login as Guest</button>
-      <div id="firebaseui-auth-container"></div>
-      <div id="loader">Loading...</div>
-    </div>
+
+<button                                                                                                                               
+onClick={handleGuestLogin}                                                                                                            
+ className="mt-4 px-4 py-2 rounded-lg font-semibold text-white bg-black rounded hover:bg-neutral-700 cursor-pointer">                  
+     Login as Guest                                                                                                                        
+ </button>                                                                                                                               
+      <div className="flex items-center my-4">                                                                                                
+        <hr className="flex-grow border-gray-300" />                                                                                          
+        <span className="px-4 text-gray-500 text-sm">or</span>                                                                                
+      <hr className="flex-grow border-gray-300" />                                                                                         
+      </div>                                                                                                                                  
+                                                                                                                                             
+      <div className="flex space-x-4 ">                                                                                                      
+        <button
+          onClick={() => handleToggleView('signIn')}
+          className={`px-4 py-2 rounded-lg font-semibold transition-colors duration-200 cursor-pointer ${
+            view === 'signIn' ? 'bg-black text-white' : 'bg-gray-200 text-gray-800 hover:bg-gray-300 '
+          }`}
+        >
+          Sign In
+        </button>
+        <button
+          onClick={() => handleToggleView('signUp')}
+          className={`px-4 py-2 rounded-lg font-semibold transition-colors duration-200 cursor-pointer ${
+           view === 'signUp' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+          }`}
+        >
+          Sign Up
+        </button>
+      </div>
+
+      {view === 'signIn' ? (
+        <SignInAuthScreen />
+      ) : (
+        <SignUpAuthScreen />
+      )}
+      </div>
   );
 };
 
-export default AuthPage;
+export default withGuest(AuthPage);

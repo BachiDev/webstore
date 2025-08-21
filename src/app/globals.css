@@ -1,20 +1,21 @@
 @import "tailwindcss";
+@import "@firebase-ui/styles/src/base.css";
 
 :root {
-  --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 41, 41, 41;
-  --background-end-rgb: 41, 41, 41;
-  --navbar-background-rgb: 28, 28, 28;
+  --foreground-rgb: #ffffff;
+  --background-start-rgb: #ffffffff;
+  --background-end-rgb: #ffffffff; 
+  --navbar-background-rgb: #1c1c1c;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: rgb(var(--background-start-rgb));
+  color: var(--foreground-rgb); 
+  background: var(--background-start-rgb); 
   font-family: var(--font-geist-mono);
 }
 
 nav {
-  background-color: rgb(var(--navbar-background-rgb));
+   background-color: var(--navbar-background-rgb);   
 }
 
 @layer utilities {

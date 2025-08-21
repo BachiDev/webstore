@@ -1,0 +1,268 @@
+[debug] [2025-08-20T12:46:40.226Z] ----------------------------------------------------------------------
+[debug] [2025-08-20T12:46:40.228Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Fabian\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only functions
+[debug] [2025-08-20T12:46:40.229Z] CLI Version:   14.11.1
+[debug] [2025-08-20T12:46:40.229Z] Platform:      win32
+[debug] [2025-08-20T12:46:40.229Z] Node Version:  v20.15.0
+[debug] [2025-08-20T12:46:40.229Z] Time:          Wed Aug 20 2025 14:46:40 GMT+0200 (Mitteleuropäische Sommerzeit)
+[debug] [2025-08-20T12:46:40.229Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-08-20T12:46:40.347Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-08-20T12:46:40.347Z] > authorizing via signed-in user (bachiaidev@gmail.com)
+[debug] [2025-08-20T12:46:40.347Z] [iam] checking project bachidev-webstore for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]
+[debug] [2025-08-20T12:46:40.348Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:46:40.348Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:46:40.349Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/bachidev-webstore:testIamPermissions [none]
+[debug] [2025-08-20T12:46:40.349Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/bachidev-webstore:testIamPermissions x-goog-quota-user=projects/bachidev-webstore
+[debug] [2025-08-20T12:46:40.349Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/bachidev-webstore:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2025-08-20T12:46:41.254Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/bachidev-webstore:testIamPermissions 200
+[debug] [2025-08-20T12:46:41.254Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/bachidev-webstore:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2025-08-20T12:46:41.254Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:46:41.254Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:46:41.254Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/bachidev-webstore/serviceAccounts/bachidev-webstore@appspot.gserviceaccount.com:testIamPermissions [none]
+[debug] [2025-08-20T12:46:41.254Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/bachidev-webstore/serviceAccounts/bachidev-webstore@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2025-08-20T12:46:42.200Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/bachidev-webstore/serviceAccounts/bachidev-webstore@appspot.gserviceaccount.com:testIamPermissions 200
+[debug] [2025-08-20T12:46:42.200Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/bachidev-webstore/serviceAccounts/bachidev-webstore@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[info] 
+[info] === Deploying to 'bachidev-webstore'...
+[info] 
+[info] i  deploying functions 
+[info] +  functions: Finished running predeploy script. 
+[debug] [2025-08-20T12:46:42.204Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:46:42.204Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:46:42.204Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/projects/bachidev-webstore [none]
+[debug] [2025-08-20T12:46:42.517Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/projects/bachidev-webstore 200
+[debug] [2025-08-20T12:46:42.517Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/projects/bachidev-webstore {"projectNumber":"1004951580520","projectId":"bachidev-webstore","lifecycleState":"ACTIVE","name":"bachidev-webstore","labels":{"firebase":"enabled","firebase-core":"disabled"},"createTime":"2025-07-12T01:59:43.978355Z"}
+[info] i  functions: preparing codebase default for deployment 
+[info] i  functions: ensuring required API cloudfunctions.googleapis.com is enabled... 
+[info] i  functions: ensuring required API cloudbuild.googleapis.com is enabled... 
+[debug] [2025-08-20T12:46:42.519Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:46:42.519Z] Checked if tokens are valid: true, expires at: 1755696208490
+[info] i  artifactregistry: ensuring required API artifactregistry.googleapis.com is enabled... 
+[debug] [2025-08-20T12:46:42.519Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:46:42.519Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:46:42.519Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/bachidev-webstore/services/cloudbuild.googleapis.com [none]
+[debug] [2025-08-20T12:46:42.519Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/bachidev-webstore/services/cloudbuild.googleapis.com x-goog-quota-user=projects/bachidev-webstore
+[debug] [2025-08-20T12:46:42.520Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/bachidev-webstore/services/artifactregistry.googleapis.com [none]
+[debug] [2025-08-20T12:46:42.520Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/bachidev-webstore/services/artifactregistry.googleapis.com x-goog-quota-user=projects/bachidev-webstore
+[debug] [2025-08-20T12:46:43.555Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/bachidev-webstore/services/cloudbuild.googleapis.com 200
+[debug] [2025-08-20T12:46:43.555Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/bachidev-webstore/services/cloudbuild.googleapis.com [omitted]
+[warn] !  functions: missing required API cloudbuild.googleapis.com. Enabling now... 
+[debug] [2025-08-20T12:46:43.556Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:46:43.556Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:46:43.556Z] >>> [apiv2][query] POST https://serviceusage.googleapis.com/v1/projects/bachidev-webstore/services/cloudbuild.googleapis.com:enable [none]
+[debug] [2025-08-20T12:46:43.556Z] >>> [apiv2][(partial)header] POST https://serviceusage.googleapis.com/v1/projects/bachidev-webstore/services/cloudbuild.googleapis.com:enable x-goog-quota-user=projects/bachidev-webstore
+[debug] [2025-08-20T12:46:43.598Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/bachidev-webstore/services/artifactregistry.googleapis.com 200
+[debug] [2025-08-20T12:46:43.598Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/bachidev-webstore/services/artifactregistry.googleapis.com [omitted]
+[warn] !  artifactregistry: missing required API artifactregistry.googleapis.com. Enabling now... 
+[debug] [2025-08-20T12:46:43.598Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:46:43.598Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:46:43.598Z] >>> [apiv2][query] POST https://serviceusage.googleapis.com/v1/projects/bachidev-webstore/services/artifactregistry.googleapis.com:enable [none]
+[debug] [2025-08-20T12:46:43.598Z] >>> [apiv2][(partial)header] POST https://serviceusage.googleapis.com/v1/projects/bachidev-webstore/services/artifactregistry.googleapis.com:enable x-goog-quota-user=projects/bachidev-webstore
+[debug] [2025-08-20T12:46:44.305Z] <<< [apiv2][status] POST https://serviceusage.googleapis.com/v1/projects/bachidev-webstore/services/cloudbuild.googleapis.com:enable 200
+[debug] [2025-08-20T12:46:44.305Z] <<< [apiv2][body] POST https://serviceusage.googleapis.com/v1/projects/bachidev-webstore/services/cloudbuild.googleapis.com:enable [omitted]
+[debug] [2025-08-20T12:46:44.320Z] <<< [apiv2][status] POST https://serviceusage.googleapis.com/v1/projects/bachidev-webstore/services/artifactregistry.googleapis.com:enable 200
+[debug] [2025-08-20T12:46:44.320Z] <<< [apiv2][body] POST https://serviceusage.googleapis.com/v1/projects/bachidev-webstore/services/artifactregistry.googleapis.com:enable [omitted]
+[debug] [2025-08-20T12:46:54.326Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:46:54.326Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:46:54.326Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/bachidev-webstore/adminSdkConfig [none]
+[debug] [2025-08-20T12:46:54.745Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/bachidev-webstore/adminSdkConfig 200
+[debug] [2025-08-20T12:46:54.745Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/bachidev-webstore/adminSdkConfig {"projectId":"bachidev-webstore","storageBucket":"bachidev-webstore.firebasestorage.app"}
+[debug] [2025-08-20T12:46:54.745Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:46:54.745Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:46:54.746Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/bachidev-webstore/configs [none]
+[debug] [2025-08-20T12:46:55.644Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/bachidev-webstore/configs 200
+[debug] [2025-08-20T12:46:55.644Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/bachidev-webstore/configs {}
+[debug] [2025-08-20T12:46:55.645Z] Validating nodejs source
+[debug] [2025-08-20T12:46:56.350Z] > [functions] package.json contents: {
+  "name": "functions",
+  "scripts": {
+    "lint": "eslint .",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "npm run build && firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "22"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "firebase-admin": "^12.6.0",
+    "firebase-functions": "^6.0.1"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "eslint": "^8.9.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-import": "^2.25.4",
+    "firebase-functions-test": "^3.1.0",
+    "typescript": "^5.7.3"
+  },
+  "private": true
+}
+[debug] [2025-08-20T12:46:56.350Z] Building nodejs source
+[info] i  functions: Loading and analyzing source code for codebase default to determine what to deploy 
+[debug] [2025-08-20T12:46:56.351Z] Could not find functions.yaml. Must use http discovery
+[debug] [2025-08-20T12:46:56.357Z] Found firebase-functions binary at 'C:\Users\Fabian\dev\webstore\functions\node_modules\.bin\firebase-functions'
+[info] Serving at port 8067
+
+[debug] [2025-08-20T12:46:56.767Z] Got response from /__/functions.yaml {"endpoints":{"createUserDocument":{"platform":"gcfv1","availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"serviceAccountEmail":null,"vpc":null,"eventTrigger":{"eventType":"providers/firebase.auth/eventTypes/user.create","eventFilters":{"resource":"projects/bachidev-webstore"},"retry":false},"labels":{},"entryPoint":"createUserDocument"}},"specVersion":"v1alpha1","requiredAPIs":[],"extensions":{}}
+[info] i  extensions: ensuring required API firebaseextensions.googleapis.com is enabled... 
+[debug] [2025-08-20T12:47:01.785Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:47:01.785Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:47:01.785Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/bachidev-webstore/services/firebaseextensions.googleapis.com [none]
+[debug] [2025-08-20T12:47:01.785Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/bachidev-webstore/services/firebaseextensions.googleapis.com x-goog-quota-user=projects/bachidev-webstore
+[debug] [2025-08-20T12:47:02.997Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/bachidev-webstore/services/firebaseextensions.googleapis.com 200
+[debug] [2025-08-20T12:47:02.997Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/bachidev-webstore/services/firebaseextensions.googleapis.com [omitted]
+[info] +  extensions: required API firebaseextensions.googleapis.com is enabled 
+[debug] [2025-08-20T12:47:03.001Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-08-20T12:47:03.001Z] > authorizing via signed-in user (bachiaidev@gmail.com)
+[debug] [2025-08-20T12:47:03.001Z] [iam] checking project bachidev-webstore for permissions ["firebase.projects.get","firebaseextensions.instances.list"]
+[debug] [2025-08-20T12:47:03.002Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:47:03.002Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:47:03.002Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/bachidev-webstore:testIamPermissions [none]
+[debug] [2025-08-20T12:47:03.002Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/bachidev-webstore:testIamPermissions x-goog-quota-user=projects/bachidev-webstore
+[debug] [2025-08-20T12:47:03.002Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/bachidev-webstore:testIamPermissions {"permissions":["firebase.projects.get","firebaseextensions.instances.list"]}
+[debug] [2025-08-20T12:47:03.957Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/bachidev-webstore:testIamPermissions 200
+[debug] [2025-08-20T12:47:03.957Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/bachidev-webstore:testIamPermissions {"permissions":["firebase.projects.get","firebaseextensions.instances.list"]}
+[debug] [2025-08-20T12:47:03.957Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:47:03.958Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:47:03.958Z] >>> [apiv2][query] GET https://firebaseextensions.googleapis.com/v1beta/projects/bachidev-webstore/instances pageSize=100&pageToken=
+[debug] [2025-08-20T12:47:04.986Z] <<< [apiv2][status] GET https://firebaseextensions.googleapis.com/v1beta/projects/bachidev-webstore/instances 200
+[debug] [2025-08-20T12:47:04.986Z] <<< [apiv2][body] GET https://firebaseextensions.googleapis.com/v1beta/projects/bachidev-webstore/instances {}
+[info] i  functions: preparing functions directory for uploading... 
+[info] i  functions: packaged C:\Users\Fabian\dev\webstore\functions (92.31 KB) for uploading 
+[debug] [2025-08-20T12:47:05.018Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:47:05.018Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:47:05.018Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v1/projects/bachidev-webstore/locations/-/functions [none]
+[debug] [2025-08-20T12:47:05.885Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v1/projects/bachidev-webstore/locations/-/functions 200
+[debug] [2025-08-20T12:47:05.885Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v1/projects/bachidev-webstore/locations/-/functions {}
+[debug] [2025-08-20T12:47:05.885Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:47:05.885Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:47:05.885Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v2/projects/bachidev-webstore/locations/-/functions filter=environment%3D%22GEN_2%22
+[debug] [2025-08-20T12:47:06.916Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v2/projects/bachidev-webstore/locations/-/functions 200
+[debug] [2025-08-20T12:47:06.916Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v2/projects/bachidev-webstore/locations/-/functions {}
+[debug] [2025-08-20T12:47:06.918Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:47:06.918Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:47:06.918Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/projects/bachidev-webstore [none]
+[debug] [2025-08-20T12:47:07.143Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/projects/bachidev-webstore 200
+[debug] [2025-08-20T12:47:07.143Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/projects/bachidev-webstore {"projectNumber":"1004951580520","projectId":"bachidev-webstore","lifecycleState":"ACTIVE","name":"bachidev-webstore","labels":{"firebase":"enabled","firebase-core":"disabled"},"createTime":"2025-07-12T01:59:43.978355Z"}
+[debug] [2025-08-20T12:47:07.144Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:47:07.144Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:47:07.144Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/bachidev-webstore/billingInfo [none]
+[debug] [2025-08-20T12:47:07.799Z] <<< [apiv2][status] GET https://cloudbilling.googleapis.com/v1/projects/bachidev-webstore/billingInfo 200
+[debug] [2025-08-20T12:47:07.799Z] <<< [apiv2][body] GET https://cloudbilling.googleapis.com/v1/projects/bachidev-webstore/billingInfo {"name":"projects/bachidev-webstore/billingInfo","projectId":"bachidev-webstore","billingAccountName":"billingAccounts/0188DA-9845C6-E46888","billingEnabled":true}
+[debug] [2025-08-20T12:47:07.800Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:47:07.800Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:47:07.800Z] >>> [apiv2][query] POST https://cloudfunctions.googleapis.com/v1/projects/bachidev-webstore/locations/us-central1/functions:generateUploadUrl [none]
+[debug] [2025-08-20T12:47:07.800Z] >>> [apiv2][body] POST https://cloudfunctions.googleapis.com/v1/projects/bachidev-webstore/locations/us-central1/functions:generateUploadUrl {}
+[debug] [2025-08-20T12:47:26.074Z] <<< [apiv2][status] POST https://cloudfunctions.googleapis.com/v1/projects/bachidev-webstore/locations/us-central1/functions:generateUploadUrl 200
+[debug] [2025-08-20T12:47:26.074Z] <<< [apiv2][body] POST https://cloudfunctions.googleapis.com/v1/projects/bachidev-webstore/locations/us-central1/functions:generateUploadUrl {"uploadUrl":"https://storage.googleapis.com/uploads-598021948361.us-central1.cloudfunctions.appspot.com/a4c121d9-8053-4a05-962f-edb1080451cf.zip?GoogleAccessId=service-1004951580520@gcf-admin-robot.iam.gserviceaccount.com&Expires=1755695846&Signature=ZMQS1Q22YsOmrdlMtlXZJMN4LOGp9Zt7YTOOBdHFsh4RftqKW4wGv1E9Zt95suSn3UBwe403Tnx1hkXzZRIrXpX878pSfx4G1j%2FxJeqAjEKS6KXcsL08w%2FWuqHO4NEM%2F9l4nJwqmhdOygR%2FYKbwb1qENhigH%2Bpr0WCmSirLdvtYHGvasyN1zY4HbRZh7B48Rp0oeIEiao%2Bac2eTaEu12Lo2pRUu3wofLqHMNyWnnBE5umNTsXnWPEjN4TzGvByGMCN8D0hXEJ%2BZi%2FovN%2F3Iz2JcJSChUJ8kRidnPypcsryWNND%2FLBeetQVGT%2FsdRo0ZbyjlPh0XWk89MpfQ7SQ6Btw%3D%3D"}
+[debug] [2025-08-20T12:47:26.074Z] >>> [apiv2][query] PUT https://storage.googleapis.com/uploads-598021948361.us-central1.cloudfunctions.appspot.com/a4c121d9-8053-4a05-962f-edb1080451cf.zip GoogleAccessId=service-1004951580520%40gcf-admin-robot.iam.gserviceaccount.com&Expires=1755695846&Signature=ZMQS1Q22YsOmrdlMtlXZJMN4LOGp9Zt7YTOOBdHFsh4RftqKW4wGv1E9Zt95suSn3UBwe403Tnx1hkXzZRIrXpX878pSfx4G1j%2FxJeqAjEKS6KXcsL08w%2FWuqHO4NEM%2F9l4nJwqmhdOygR%2FYKbwb1qENhigH%2Bpr0WCmSirLdvtYHGvasyN1zY4HbRZh7B48Rp0oeIEiao%2Bac2eTaEu12Lo2pRUu3wofLqHMNyWnnBE5umNTsXnWPEjN4TzGvByGMCN8D0hXEJ%2BZi%2FovN%2F3Iz2JcJSChUJ8kRidnPypcsryWNND%2FLBeetQVGT%2FsdRo0ZbyjlPh0XWk89MpfQ7SQ6Btw%3D%3D
+[debug] [2025-08-20T12:47:26.075Z] >>> [apiv2][body] PUT https://storage.googleapis.com/uploads-598021948361.us-central1.cloudfunctions.appspot.com/a4c121d9-8053-4a05-962f-edb1080451cf.zip [stream]
+[debug] [2025-08-20T12:47:27.516Z] <<< [apiv2][status] PUT https://storage.googleapis.com/uploads-598021948361.us-central1.cloudfunctions.appspot.com/a4c121d9-8053-4a05-962f-edb1080451cf.zip 200
+[debug] [2025-08-20T12:47:27.516Z] <<< [apiv2][body] PUT https://storage.googleapis.com/uploads-598021948361.us-central1.cloudfunctions.appspot.com/a4c121d9-8053-4a05-962f-edb1080451cf.zip [omitted]
+[info] +  functions: functions folder uploaded successfully 
+[info] i  functions: creating Node.js 22 (1st Gen) function createUserDocument(us-central1)... 
+[debug] [2025-08-20T12:47:27.518Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:47:27.518Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:47:27.518Z] >>> [apiv2][query] POST https://cloudfunctions.googleapis.com/v1/projects/bachidev-webstore/locations/us-central1/functions [none]
+[debug] [2025-08-20T12:47:27.518Z] >>> [apiv2][body] POST https://cloudfunctions.googleapis.com/v1/projects/bachidev-webstore/locations/us-central1/functions {"name":"projects/bachidev-webstore/locations/us-central1/functions/createUserDocument","sourceUploadUrl":"https://storage.googleapis.com/uploads-598021948361.us-central1.cloudfunctions.appspot.com/a4c121d9-8053-4a05-962f-edb1080451cf.zip?GoogleAccessId=service-1004951580520@gcf-admin-robot.iam.gserviceaccount.com&Expires=1755695846&Signature=ZMQS1Q22YsOmrdlMtlXZJMN4LOGp9Zt7YTOOBdHFsh4RftqKW4wGv1E9Zt95suSn3UBwe403Tnx1hkXzZRIrXpX878pSfx4G1j%2FxJeqAjEKS6KXcsL08w%2FWuqHO4NEM%2F9l4nJwqmhdOygR%2FYKbwb1qENhigH%2Bpr0WCmSirLdvtYHGvasyN1zY4HbRZh7B48Rp0oeIEiao%2Bac2eTaEu12Lo2pRUu3wofLqHMNyWnnBE5umNTsXnWPEjN4TzGvByGMCN8D0hXEJ%2BZi%2FovN%2F3Iz2JcJSChUJ8kRidnPypcsryWNND%2FLBeetQVGT%2FsdRo0ZbyjlPh0XWk89MpfQ7SQ6Btw%3D%3D","entryPoint":"createUserDocument","runtime":"nodejs22","dockerRegistry":"ARTIFACT_REGISTRY","labels":{"deployment-tool":"cli-firebase","firebase-functions-hash":"bf1fdffb0fad21fc6537d3e1043ef387b0e18912"},"eventTrigger":{"eventType":"providers/firebase.auth/eventTypes/user.create","resource":"projects/bachidev-webstore"},"minInstances":null,"maxInstances":null,"ingressSettings":null,"environmentVariables":{"FIREBASE_CONFIG":"{\"projectId\":\"bachidev-webstore\",\"storageBucket\":\"bachidev-webstore.firebasestorage.app\"}","GCLOUD_PROJECT":"bachidev-webstore","EVENTARC_CLOUD_EVENT_SOURCE":"projects/bachidev-webstore/locations/us-central1/functions/createUserDocument"},"serviceAccountEmail":null,"availableMemoryMb":null,"timeout":null,"vpcConnector":null,"vpcConnectorEgressSettings":null,"buildEnvironmentVariables":{"GOOGLE_NODE_RUN_SCRIPTS":""}}
+[debug] [2025-08-20T12:47:27.903Z] <<< [apiv2][status] POST https://cloudfunctions.googleapis.com/v1/projects/bachidev-webstore/locations/us-central1/functions 400
+[debug] [2025-08-20T12:47:27.903Z] <<< [apiv2][body] POST https://cloudfunctions.googleapis.com/v1/projects/bachidev-webstore/locations/us-central1/functions {"error":{"code":400,"message":"Failed to create 1st Gen function projects/bachidev-webstore/locations/us-central1/functions/createUserDocument: runtime: Runtime validation errors: [error_code: \t INVALID_RUNTIME\nmessage: \"Runtime \\\"nodejs22\\\" is not supported on GCF Gen1\"\n]","status":"INVALID_ARGUMENT"}}
+[warn] !  functions: Runtime "nodejs22" is not supported on GCF Gen1 for function projects/bachidev-webstore/locations/us-central1/functions/createUserDocument 
+[warn] !  functions: failed to create function projects/bachidev-webstore/locations/us-central1/functions/createUserDocument 
+[error] Failed to create function projects/bachidev-webstore/locations/us-central1/functions/createUserDocument
+[debug] [2025-08-20T12:47:27.908Z] Total Function Deployment time: 387
+[debug] [2025-08-20T12:47:27.908Z] 1 Functions Deployed
+[debug] [2025-08-20T12:47:27.908Z] 1 Functions Errored
+[debug] [2025-08-20T12:47:27.908Z] 0 Function Deployments Aborted
+[debug] [2025-08-20T12:47:27.908Z] Average Function Deployment time: 387
+[info] 
+[info] Functions deploy had errors with the following functions:
+	createUserDocument(us-central1)
+[debug] [2025-08-20T12:47:28.059Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:47:28.059Z] Checked if tokens are valid: true, expires at: 1755696208490
+[debug] [2025-08-20T12:47:28.059Z] >>> [apiv2][query] GET https://artifactregistry.googleapis.com/v1/projects/bachidev-webstore/locations/us-central1/repositories/gcf-artifacts [none]
+[debug] [2025-08-20T12:47:28.948Z] <<< [apiv2][status] GET https://artifactregistry.googleapis.com/v1/projects/bachidev-webstore/locations/us-central1/repositories/gcf-artifacts 404
+[debug] [2025-08-20T12:47:28.948Z] <<< [apiv2][body] GET https://artifactregistry.googleapis.com/v1/projects/bachidev-webstore/locations/us-central1/repositories/gcf-artifacts {"error":{"code":404,"message":"Requested entity was not found.","status":"NOT_FOUND"}}
+[debug] [2025-08-20T12:47:28.948Z] Failed to check artifact cleanup policy for region us-central1: Request to https://artifactregistry.googleapis.com/v1/projects/bachidev-webstore/locations/us-central1/repositories/gcf-artifacts had HTTP Error: 404, Requested entity was not found. {"name":"FirebaseError","children":[],"context":{"body":{"error":{"code":404,"message":"Requested entity was not found.","status":"NOT_FOUND"}},"response":{"statusCode":404}},"exit":1,"message":"Request to https://artifactregistry.googleapis.com/v1/projects/bachidev-webstore/locations/us-central1/repositories/gcf-artifacts had HTTP Error: 404, Requested entity was not found.","status":404}
+[debug] [2025-08-20T12:47:28.948Z] Functions deploy failed.
+[debug] [2025-08-20T12:47:28.948Z] {
+  "endpoint": {
+    "id": "createUserDocument",
+    "project": "bachidev-webstore",
+    "region": "us-central1",
+    "entryPoint": "createUserDocument",
+    "platform": "gcfv1",
+    "runtime": "nodejs22",
+    "eventTrigger": {
+      "eventType": "providers/firebase.auth/eventTypes/user.create",
+      "retry": false,
+      "eventFilters": {
+        "resource": "projects/bachidev-webstore"
+      }
+    },
+    "labels": {
+      "deployment-tool": "cli-firebase"
+    },
+    "serviceAccount": null,
+    "ingressSettings": null,
+    "availableMemoryMb": null,
+    "timeoutSeconds": null,
+    "maxInstances": null,
+    "minInstances": null,
+    "vpc": null,
+    "environmentVariables": {
+      "FIREBASE_CONFIG": "{\"projectId\":\"bachidev-webstore\",\"storageBucket\":\"bachidev-webstore.firebasestorage.app\"}",
+      "GCLOUD_PROJECT": "bachidev-webstore",
+      "EVENTARC_CLOUD_EVENT_SOURCE": "projects/bachidev-webstore/locations/us-central1/functions/createUserDocument"
+    },
+    "codebase": "default",
+    "targetedByOnly": false,
+    "hash": "bf1fdffb0fad21fc6537d3e1043ef387b0e18912"
+  },
+  "op": "create",
+  "original": {
+    "name": "FirebaseError",
+    "children": [],
+    "context": {
+      "function": "projects/bachidev-webstore/locations/us-central1/functions/createUserDocument"
+    },
+    "exit": 1,
+    "message": "Failed to create function projects/bachidev-webstore/locations/us-central1/functions/createUserDocument",
+    "original": {
+      "name": "FirebaseError",
+      "children": [],
+      "context": {
+        "body": {
+          "error": {
+            "code": 400,
+            "message": "Failed to create 1st Gen function projects/bachidev-webstore/locations/us-central1/functions/createUserDocument: runtime: Runtime validation errors: [error_code: \t INVALID_RUNTIME\nmessage: \"Runtime \\\"nodejs22\\\" is not supported on GCF Gen1\"\n]",
+            "status": "INVALID_ARGUMENT"
+          }
+        },
+        "response": {
+          "statusCode": 400
+        }
+      },
+      "exit": 1,
+      "message": "Request to https://cloudfunctions.googleapis.com/v1/projects/bachidev-webstore/locations/us-central1/functions had HTTP Error: 400, Failed to create 1st Gen function projects/bachidev-webstore/locations/us-central1/functions/createUserDocument: runtime: Runtime validation errors: [error_code: \t INVALID_RUNTIME\nmessage: \"Runtime \\\"nodejs22\\\" is not supported on GCF Gen1\"\n]",
+      "status": 400
+    },
+    "status": 400,
+    "code": 400
+  }
+}
+[debug] [2025-08-20T12:47:29.006Z] Error: Failed to create function createUserDocument in region us-central1
+    at C:\Users\Fabian\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\functions\release\fabricator.js:52:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Fabricator.createV1Function (C:\Users\Fabian\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\functions\release\fabricator.js:182:32)
+    at async Fabricator.createEndpoint (C:\Users\Fabian\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\functions\release\fabricator.js:134:13)
+    at async handle (C:\Users\Fabian\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\functions\release\fabricator.js:89:17)
+[error] 
+[error] Error: There was an error deploying functions
