@@ -6,13 +6,16 @@ import { useRouter } from 'next/navigation';
 import { useUser } from '../../lib/UserContext';
 import Image from 'next/image';
 import withAuth from '../../components/withAuth';
-import { getCurrentUserSubscriptions, Subscription } from '@invertase/firestore-stripe-payments';
+import { getCurrentUserSubscriptions, getCurrentUserPayments, Payment, Subscription } from '@invertase/firestore-stripe-payments';
 import { useEffect, useState } from 'react';
+import PaymentsTable from '../../components/PaymentsTable';
+import SubscriptionsTable from '../../components/SubscriptionsTable';
 
 const ProfilePage = () => {
   const router = useRouter();
   const { user } = useUser();
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
+  const [userPayments, setUserPayments] = useState<Payment[]>([]);
 
   useEffect(() => {
     const fetchSubscriptions = async () => {
@@ -23,6 +26,16 @@ const ProfilePage = () => {
     };
     if (user) {
       fetchSubscriptions();
+    }
+  }, [user]);
+
+  useEffect(() => {
+    const fetchPayments = async () => {
+      const payments = await getCurrentUserPayments(payments);
+      setUserPayments(payments);
+    };
+    if (user) {
+      fetchPayments();
     }
   }, [user]);
 
@@ -49,19 +62,8 @@ const ProfilePage = () => {
       ) : (
         <p>Please log in to view your profile.</p>
       )}
-      {subscriptions.length > 0 && (
-        <div className="mt-8">
-          <h2 className="text-xl font-bold mb-4">Active Subscriptions</h2>
-          <ul>
-            {subscriptions.map(subscription => (
-              <li key={subscription.id} className="mb-4 p-4 border rounded-md">
-                <p className="text-lg font-bold">Role: {subscription.role}</p>
-                <p>Current period end: {new Date(subscription.current_period_end).toLocaleDateString()}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      {subscriptions.length > 0 && <SubscriptionsTable subscriptions={subscriptions} />}
+      {payments.length > 0 && <PaymentsTable payments={payments} />}
     </div>
   );
 };
