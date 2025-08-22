@@ -12,7 +12,7 @@ export default function Home() {
         <h1 className="text-4xl font-bold mb-4 text-black">Welcome to the Demo WebStore</h1>
         <p className="text-lg mb-8 text-black">This is a demo webstore with secure simulated Stripe payments.</p>
         {user ? (
-          <p className="text-lg mb-8 text-black">You are automatically signed in as Guest. You can <Link href="/profile" className="text-blue-500 hover:underline">register on your profile</Link> to save your data.</p>
+          <p className="text-lg mb-8 text-black">You are automatically signed in as Guest. You can <Link href="/profile" className="text-blue-500 hover:underline"> log out and sign up with Email</Link> to save your data across devices.</p>
         ) : (
           <p className="text-lg mb-8 text-black">You need to be <Link href="/auth" className="text-blue-500 hover:underline">logged in</Link> (as Guest) to purchase subscriptions. </p> 
         )}
