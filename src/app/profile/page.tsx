@@ -91,6 +91,7 @@ const ProfilePage = () => {
             width={96}
             height={96}
             className="rounded-full mb-4"
+            unoptimized
           />
           <p className="text-lg mb-2 text-black">
             Email: {user.email || "N/A"}
