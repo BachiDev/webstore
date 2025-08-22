@@ -17,6 +17,7 @@ const CartPage = () => {
   const [cartProducts, setCartProducts] = useState<CartProduct[]>([]);
   const [total, setTotal] = useState(0);
   const [isProcessingCheckout, setIsProcessingCheckout] = useState(false);
+  const [isTotalTooHigh, setIsTotalTooHigh] = useState(false);
 
   useEffect(() => {
     const fetchCartProducts = async () => {
@@ -51,6 +52,7 @@ const CartPage = () => {
 
       setCartProducts(productsInCart);
       setTotal(currentTotal);
+      setIsTotalTooHigh(currentTotal > 999999.00); // Set state based on total
     };
 
     fetchCartProducts();
@@ -122,8 +124,12 @@ const CartPage = () => {
           </div>
           <div className="mt-8 text-right">
             <h2 className="text-xl font-bold text-black">Total: € {total.toFixed(2)}</h2>
-            <button onClick={handleCheckout} disabled={isProcessingCheckout || cartProducts.length === 0} className="bg-green-600 hover:bg-green-700 text-white py-2 px-6 rounded-lg mt-4 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
-              {isProcessingCheckout ? 'Please wait...' : 'Proceed to Checkout'}
+            <button
+              onClick={handleCheckout}
+              disabled={isProcessingCheckout || cartProducts.length === 0 || isTotalTooHigh}
+              className="bg-green-600 hover:bg-green-700 text-white py-2 px-6 rounded-lg mt-4 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isTotalTooHigh ? 'Total too high' : (isProcessingCheckout ? 'Please wait...' : 'Proceed to Checkout')}
             </button>
             <button onClick={clearCart} className="bg-gray-600 hover:bg-gray-700 text-white py-2 px-6 rounded-lg mt-4 ml-4 cursor-pointer">
               Clear Cart
