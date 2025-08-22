@@ -29,7 +29,7 @@ const NavLink = ({ href, children, onClick, className = "" }: { href: string; ch
 const ProfileButton = ({ user, onClick }: { user: User, onClick?: () => void }) => (
   <Link href="/profile" onClick={onClick} className="flex items-center space-x-2 bg-white text-black hover:text-black hover:bg-gray-200       │
  │       rounded-full p-2 px-4">
-    <Image src={user.photoURL || 'https://www.gravatar.com/avatar/?d=mp'} alt="Profile" width={32} height={32} className="rounded-full" />
+    <Image src={user.photoURL || 'https://www.gravatar.com/avatar/?d=mp'} alt="Profile" width={32} height={32} className="rounded-full" unoptimized/>
     <span>{user.email || 'Guest'}</span>
   </Link>
 );
@@ -57,7 +57,7 @@ const Navbar = () => {
     <nav className="bg-gray-900 text-white p-4">
       <div className="container mx-auto flex justify-between items-center">
         <NavLink href="/" className="text-2xl font-bold flex items-center space-x-2">
-          <Image src="/logo.png" alt="WebStore Logo" width={32} height={32} />
+          <Image src="./logo.png" alt="WebStore Logo" width={32} height={32} />
           <span>WebStore</span>
         </NavLink>
         <div className="hidden md:flex space-x-4 items-center">

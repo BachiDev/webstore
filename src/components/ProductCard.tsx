@@ -10,7 +10,7 @@ const ProductCard = ({ name, description, images, prices }: Product) => {
 
   return (
     <div className="max-w-sm rounded-lg overflow-hidden shadow-lg bg-neutral-900 hover:bg-neutral-700">
-      {images && images[0] && <Image src={images[0]} alt={name!} width={300} height={200} className="w-full h-48 object-cover" />}
+      {images && images[0] && <Image src={images[0]} alt={name!} width={300} height={200} className="w-full h-48 object-cover" unoptimized/>}
       <div className="px-6 py-4">
         <div className="font-bold text-xl mb-2">{name}</div>
         <p className="text-gray-400 text-base mb-2">
