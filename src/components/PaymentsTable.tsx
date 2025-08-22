@@ -8,7 +8,7 @@ interface PaymentsTableProps {
 
 const PaymentsTable = ({ payments }: PaymentsTableProps) => {
   return (
-    <div className="mt-8 text-black">
+    <div className="m-4 text-black">
       <h2 className="text-xl font-bold mb-4">Payments</h2>
       <table className="w-full border-collapse">
         <thead>
