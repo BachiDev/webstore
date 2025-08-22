@@ -1,6 +1,7 @@
 'use client';
 
 import { useCart } from '../../lib/CartContext';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { getProducts, Product, Price } from '@invertase/firestore-stripe-payments';
 import { payments } from '@/lib/firebase';
@@ -88,7 +89,7 @@ const CartPage = () => {
                 <div key={product.id} className="flex flex-col md:flex-row items-center justify-between border p-4 rounded-lg bg-neutral-900 text-white">
                   <div className="flex items-center space-x-4 mb-4 md:mb-0">
                     {product.images && product.images[0] && (
-                      <img src={product.images[0]} alt={product.name!} className="w-20 h-20 object-cover rounded" />
+                      <Image unoptimized src={product.images[0]} alt={product.name!} width={80} height={80} className="w-20 h-20 object-cover rounded" />
                     )}
                     <div>
                       <h2 className="text-lg font-bold">{product.name}</h2>

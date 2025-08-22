@@ -9,7 +9,6 @@ import { useRouter } from 'next/navigation';
 import { onAuthStateChanged, signInAnonymously } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import withGuest from '../../components/withGuest';
-import withAuth from '@/components/withAuth';
 
 const AuthPage = () => {
   const router = useRouter();
@@ -81,4 +80,4 @@ onClick={handleGuestLogin}
   );
 };
 
-export default (AuthPage);
+export default withGuest(AuthPage);

@@ -17,7 +17,6 @@ import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import PaymentsTable from "../../components/PaymentsTable";
 import SubscriptionsTable from "../../components/SubscriptionsTable";
-import { SignUpAuthScreen } from "@firebase-ui/react";
 
 const ProfilePage = () => {
   const router = useRouter();

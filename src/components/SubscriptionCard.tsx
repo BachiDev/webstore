@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { Price, Product } from "@invertase/firestore-stripe-payments";
+import { Product } from "@invertase/firestore-stripe-payments";
 import { createCheckout } from "@/lib/createCheckout";
 import { useState } from "react";
 
