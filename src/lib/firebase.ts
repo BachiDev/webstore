@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-import { autoUpgradeAnonymousUsers, initializeUI } from "@firebase-ui/core";
+import { initializeUI } from "@firebase-ui/core";
 import { getStripePayments } from "@invertase/firestore-stripe-payments";
 
 const firebaseConfig = {
