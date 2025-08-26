@@ -1,31 +1,19 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { firestore } from '../../../lib/firebase';
-import { collection, getDocs } from 'firebase/firestore';
-import withAuth from '../../../components/withAuth';
-import { useUser } from '../../../lib/UserContext';
+import withAuth from '@/components/withAuth';
+import { useContent } from '../../../lib/useContent';
+import { useRole } from '../../../lib/useRole';
 
 const PremiumContentPage = () => {
-  const { user, role } = useUser();
-  const [content, setContent] = useState<string[]>([]);
+  const { isPremium } = useRole();
+  const { content, loading } = useContent('content-premium');
 
-  useEffect(() => {
-    const fetchContent = async () => {
-      if (role === 'Premium') {
-        const premiumQuery = await getDocs(collection(firestore, 'content-premium'));
-        const premiumContent = premiumQuery.docs.map(doc => doc.data().content as string);
-        setContent(premiumContent);
-      }
-    };
-
-    if (user) {
-      fetchContent();
-    }
-  }, [user, role]);
-
-  if (role !== 'Premium') {
+  if (!isPremium) {
     return <div className="text-black container mx-auto p-4">You do not have permission to view this content.</div>;
+  }
+
+  if (loading) {
+    return <div>Loading...</div>;
   }
 
   return (

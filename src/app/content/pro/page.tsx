@@ -1,31 +1,19 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { firestore } from '../../../lib/firebase';
-import { collection, getDocs } from 'firebase/firestore';
-import withAuth from '../../../components/withAuth';
-import { useUser } from '../../../lib/UserContext';
+import withAuth from '@/components/withAuth';
+import { useContent } from '../../../lib/useContent';
+import { useRole } from '../../../lib/useRole';
 
 const ProContentPage = () => {
-  const { user, role } = useUser();
-  const [content, setContent] = useState<string[]>([]);
+  const { isPro } = useRole();
+  const { content, loading } = useContent('content-pro');
 
-  useEffect(() => {
-    const fetchContent = async () => {
-      if (role === 'Pro' || role === 'Premium') {
-        const proQuery = await getDocs(collection(firestore, 'content-pro'));
-        const proContent = proQuery.docs.map(doc => doc.data().content as string);
-        setContent(proContent);
-      }
-    };
-
-    if (user) {
-      fetchContent();
-    }
-  }, [user, role]);
-
-  if (role !== 'Pro' && role !== 'Premium') {
+  if (!isPro) {
     return <div className="text-black container mx-auto p-4">You do not have permission to view this content.</div>;
+  }
+
+  if (loading) {
+    return <div>Loading...</div>;
   }
 
   return (

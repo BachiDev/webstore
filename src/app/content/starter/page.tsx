@@ -1,31 +1,19 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { firestore } from '../../../lib/firebase';
-import { collection, getDocs } from 'firebase/firestore';
-import withAuth from '../../../components/withAuth';
-import { useUser } from '../../../lib/UserContext';
+import withAuth from '@/components/withAuth';
+import { useContent } from '../../../lib/useContent';
+import { useRole } from '../../../lib/useRole';
 
 const StarterContentPage = () => {
-  const { user, role } = useUser();
-  const [content, setContent] = useState<string[]>([]);
+  const { isStarter } = useRole();
+  const { content, loading } = useContent('content-starter');
 
-  useEffect(() => {
-    const fetchContent = async () => {
-      if (role === 'Starter' || role === 'Pro' || role === 'Premium') {
-        const querySnapshot = await getDocs(collection(firestore, 'content-starter'));
-        const starterContent = querySnapshot.docs.map(doc => doc.data().content as string);
-        setContent(starterContent);
-      }
-    };
-
-    if (user) {
-      fetchContent();
-    }
-  }, [user, role]);
-
-  if (role !== 'Starter' && role !== 'Pro' && role !== 'Premium') {
+  if (!isStarter) {
     return <div className="text-black container mx-auto p-4">You do not have permission to view this content.</div>;
+  }
+
+  if (loading) {
+    return <div>Loading...</div>;
   }
 
   return (
