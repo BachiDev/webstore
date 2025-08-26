@@ -12,12 +12,18 @@ interface NavItem {
   label: string;
   authRequired?: boolean;
   guestOnly?: boolean;
-  roleRequired?: boolean;
+  roleRequired?: string;
 }
 
 const navItems: NavItem[] = [
   { href: "/store", label: "Store" },
   { href: "/subscription", label: "Subscription"},
+];
+
+const roleNavItems: NavItem[] = [
+  { href: "/content/starter", label: "Starter", roleRequired: "Starter" },
+  { href: "/content/pro", label: "Pro", roleRequired: "Pro" },
+  { href: "/content/premium", label: "Premium", roleRequired: "Premium" },
 ];
 
 const NavLink = ({ href, children, onClick, className = "" }: { href: string; children: React.ReactNode; onClick?: () => void; className?: string }) => (
@@ -64,19 +70,30 @@ const Navbar = () => {
   const filteredNavItems = navItems.filter(item => {
     if (item.authRequired && !user) return false;
     if (item.guestOnly && user) return false;
-    if (item.roleRequired && !role) return false;
+    if (item.href === '/subscription' && (!user || role)) return false;
     return true;
+  });
+
+  const filteredRoleNavItems = roleNavItems.filter(item => {
+    if (!user || !role) return false;
+    if (item.roleRequired === 'Starter' && (role === 'Starter' || role === 'Pro' || role === 'Premium')) return true;
+    if (item.roleRequired === 'Pro' && (role === 'Pro' || role === 'Premium')) return true;
+    if (item.roleRequired === 'Premium' && role === 'Premium') return true;
+    return false;
   });
 
   return (
     <nav className="bg-gray-900 text-white p-4">
       <div className="container mx-auto flex justify-between items-center">
         <NavLink href="/" className="text-2xl font-bold flex items-center space-x-2">
-          <Image src="./logo.png" alt="WebStore Logo" width={32} height={32} unoptimized/>
+          <Image src="/logo.png" alt="WebStore Logo" width={32} height={32} unoptimized/>
           <span>WebStore</span>
         </NavLink>
         <div className="hidden md:flex space-x-4 items-center">
           {filteredNavItems.map(item => (
+            <NavLink key={item.href} href={item.href}>{item.label}</NavLink>
+          ))}
+          {filteredRoleNavItems.map(item => (
             <NavLink key={item.href} href={item.href}>{item.label}</NavLink>
           ))}
           <CartIcon />
@@ -103,6 +120,9 @@ const Navbar = () => {
       {isOpen && (
         <div className="md:hidden mt-4">
           {filteredNavItems.map(item => (
+            <NavLink key={item.href} href={item.href} onClick={toggleMenu} className="block py-2 px-4 hover:bg-gray-700">{item.label}</NavLink>
+          ))}
+          {filteredRoleNavItems.map(item => (
             <NavLink key={item.href} href={item.href} onClick={toggleMenu} className="block py-2 px-4 hover:bg-gray-700">{item.label}</NavLink>
           ))}
           {loading ? (
