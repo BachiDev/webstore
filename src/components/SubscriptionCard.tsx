@@ -41,7 +41,7 @@ const SubscriptionCard = ({ product, billingInterval }: { product: Product, bill
         )}
         {billingInterval === "month" && monthlyPrice && (
           <div className="text-center">
-            <p className="text-white text-lg font-bold">${monthlyPrice.unit_amount! / 100} / month</p>
+            <p className="text-white text-lg font-bold">€ {monthlyPrice.unit_amount! / 100} / month</p>
             <button
               onClick={() => handleCheckout(monthlyPrice.id)}
               className="bg-white hover:bg-neutral-300 text-black font-bold py-2 px-4 rounded mt-4 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"

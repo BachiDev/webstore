@@ -94,7 +94,7 @@ const ProfilePage = () => {
             unoptimized
           />
           <p className="text-lg mb-2 text-black">
-            Email: {user.email || "N/A"}
+            Email: {user.email || "Guest"}
           </p>
           <p className="text-lg mb-4 text-black">UID: {user.uid}</p>
           <div className="flex space-x-4">

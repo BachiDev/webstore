@@ -39,9 +39,24 @@ const LoginButton = ({ onClick }: { onClick?: () => void }) => (
  │       rounded-full p-2 px-4">Login</Link>
 );
 
+const CartIcon = () => {
+  const { cartItems } = useCart();
+  return (
+    <NavLink href="/cart" className="relative inline-block !block">
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 relative" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+      </svg>
+      {cartItems.length > 0 && (
+        <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center z-50 !important">
+          {cartItems.length}
+        </span>
+      )}
+    </NavLink>
+  );
+};
+
 const Navbar = () => {
   const { user, loading, role } = useUser();
-  const { cartItems } = useCart();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -64,16 +79,7 @@ const Navbar = () => {
           {filteredNavItems.map(item => (
             <NavLink key={item.href} href={item.href}>{item.label}</NavLink>
           ))}
-          <NavLink href="/cart" className="relative inline-block !block">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 relative" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-            </svg>
-            {cartItems.length > 0 && (
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center z-50 !important">
-                {cartItems.length}
-              </span>
-            )}
-          </NavLink>
+          <CartIcon />
           {loading ? (
             <div className="flex items-center space-x-2">
               <span className="w-8 h-8 rounded-full bg-gray-700 animate-pulse"></span>
@@ -85,8 +91,9 @@ const Navbar = () => {
             <LoginButton />
           )}
         </div>
-        <div className="md:hidden">
-          <button onClick={toggleMenu}>
+        <div className="md:hidden flex items-center">
+          <CartIcon />
+          <button onClick={toggleMenu} className="ml-4">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path>
             </svg>
@@ -105,17 +112,6 @@ const Navbar = () => {
           ) : (
             <LoginButton onClick={toggleMenu} />
           )}
-                    <NavLink href="/cart" onClick={toggleMenu} className="block py-2 px-4 hover:bg-gray-700 relative inline-block !block">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 inline-block mr-2 relative" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-            </svg>
-            Cart
-            {cartItems.length > 0 && (
-              <span className="absolute -top-1 -left-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center z-50 !important">
-                {cartItems.length}
-              </span>
-            )}
-          </NavLink>
         </div>
       )}
     </nav>

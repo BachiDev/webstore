@@ -1,36 +1,89 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# WebStore - A Full-Stack E-commerce Platform
 
-## Getting Started
+This is a full-stack webstore application built with Next.js, Firebase, and Stripe. It serves as a portfolio project to showcase a variety of web development skills, including frontend development with React and Tailwind CSS, backend development with Firebase Functions, and integration with third-party services like Stripe for payments.
 
-First, run the development server:
+## Live Demo
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+[Check Out Live](https://bachidev-webstore.web.app/) 
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+*   **User Authentication:**
+    *   Automatic anonymous user sessions for guests.
+    *   Email/password sign-up and sign-in to save data across sessions and devices.
+    *   Protected routes for authenticated users.
+*   **Product Management:**
+    *   Display products from a Firestore database.
+*   **Shopping Cart:**
+    *   Add, remove, and update product quantities in the cart.
+    *   Cart state is persisted in `localStorage`.
+*   **Payments and Subscriptions:**
+    *   Integration with Stripe for one-time payments and recurring subscriptions.
+    *   Secure checkout process handled by Stripe.
+    *   View payment history and manage subscriptions in the user profile.
+*   **User Profile:**
+    *   View user information.
+    *   View and manage subscriptions through the Stripe customer portal.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Technologies Used
 
-## Learn More
+### Frontend
 
-To learn more about Next.js, take a look at the following resources:
+*   **Next.js:** A React framework for building server-side rendered and statically generated web applications.
+*   **React:** A JavaScript library for building user interfaces.
+*   **Tailwind CSS:** A utility-first CSS framework for rapid UI development.
+*   **Firebase UI:** A set of pre-built UI components for Firebase authentication.
+*   **TypeScript:** A typed superset of JavaScript that compiles to plain JavaScript.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Backend
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+*   **Firebase:**
+    *   **Authentication:** Manages user sign-up, sign-in, and sessions.
+    *   **Firestore:** A NoSQL database for storing product and user data.
+    *   **Firebase Functions:** Serverless functions for backend logic.
+    *   **Firebase Hosting:** Hosts the Next.js application.
+*   **Stripe:**
+    *   **Stripe Payments:** Handles one-time payments and subscriptions.
+    *   **Stripe Checkout:** Provides a secure, pre-built checkout page.
+    *   **Stripe Customer Portal:** Allows users to manage their subscriptions.
 
-## Deploy on Vercel
+## Technical Deep Dive
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Authentication
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The authentication system is built using Firebase Authentication. It supports both anonymous and permanent user accounts.
+
+*   **Anonymous Login:** When a user first visits the site, they are automatically signed in as an anonymous user. This allows them to browse the store and add items to their cart without creating an account. The anonymous session is managed in `src/lib/UserContext.tsx`, where the `onAuthStateChanged` listener checks if a user is logged in. If not, and if the user hasn't explicitly logged out (using a flag in `localStorage`), an anonymous user is created with `signInAnonymously`.
+
+*   **Permanent Accounts:** Users can sign up for a permanent account using their email and password.
+
+*   **Session Management:** The user's authentication state is managed globally using a React Context (`UserContext`). The `useUser` hook provides access to the user object and loading state throughout the application. Protected routes are implemented using Higher-Order Components (HOCs) like `withAuth` and `withGuest` to restrict access based on the user's authentication status.
+
+### Stripe Integration
+
+The integration with Stripe is handled by the `@invertase/firestore-stripe-payments` library, which simplifies the process of using Stripe with Firebase.
+
+*   **Products and Prices:** Products and their prices are created in the Stripe dashboard. The Firebase Stripe extension automatically syncs this data to the Firestore database.
+
+*   **Checkout:** When a user proceeds to checkout, a checkout session is created using the `createCheckoutSession` function from the `@invertase/firestore-stripe-payments` library. This function communicates with a Firebase Function (provided by the Stripe extension) to create a secure checkout session with Stripe. The user is then redirected to the Stripe Checkout page to complete the payment.
+
+*   **Subscriptions:** The process for creating a subscription is similar to a one-time payment. The user selects a subscription product, and a checkout session is created for that subscription.
+
+*   **Customer Portal:** Authenticated users can manage their subscriptions through the Stripe Customer Portal. A link to the portal is generated by a Firebase Function, allowing users to view their payment history, update their payment methods, and cancel their subscriptions.
+
+### Frontend Architecture
+
+The frontend is built with Next.js and follows a modern React architecture.
+
+*   **Component-Based:** The UI is broken down into reusable components, located in the `src/components` directory.
+*   **State Management:** Global state, such as the user's authentication status and shopping cart, is managed using React Context (`UserContext` and `CartContext`).
+*   **Routing:** Next.js's file-system based routing is used for navigation.
+*   **Styling:** Tailwind CSS is used for styling, providing a highly customizable and efficient way to build the UI.
+
+### Backend Architecture
+
+The backend is powered by Firebase services.
+
+*   **Serverless:** The use of Firebase Functions allows for a serverless architecture, which is scalable and cost-effective.
+*   **Database:** Firestore is used as the primary database for storing product and user data.
+*   **Authentication:** Firebase Authentication provides a secure and easy-to-use authentication solution.
