@@ -11,9 +11,10 @@ export default function Home() {
       <div className="text-center">
         <h1 className="text-4xl font-bold mb-4 text-black">Welcome to the Demo WebStore</h1>
         <p className="text-lg mb-8 text-black">This is a demo webstore with secure simulated Stripe payments.</p>
-        {user ? (
-          <p className="text-lg mb-8 text-black">You are automatically signed in as Guest. You can <Link href="/profile" className="text-blue-500 hover:underline"> log out and sign up with Email</Link> to save your data across devices.</p>
-        ) : (
+        {user && !user.email && (
+          <p className="text-lg mb-8 text-black">You are signed in as Guest. You can <Link href="/profile" className="text-blue-500 hover:underline"> log out and sign up with Email</Link> to save your data across sessions/devices.</p>
+        )}
+        {!user && (
           <p className="text-lg mb-8 text-black">You need to be <Link href="/auth" className="text-blue-500 hover:underline">logged in</Link> (as Guest) to purchase subscriptions. </p> 
         )}
         <p className="text-lg mb-8 text-black">Here&apos;s what you can do:</p>
@@ -36,6 +37,18 @@ export default function Home() {
                 <div className="font-bold text-xl mb-2">Recurring Payments</div>
                 <p className="text-gray-400 text-base">
                   Purchase a subscription.
+                </p>
+              </div>
+            </div>
+          </Link>
+        )}
+        {user && (
+          <Link href="/profile">
+            <div className="max-w-sm rounded-lg overflow-hidden shadow-lg bg-neutral-900 hover:bg-neutral-700 cursor-pointer text-center"> 
+              <div className="px-6 py-4">
+                <div className="font-bold text-xl mb-2">Manage Subscriptions</div>
+                <p className="text-gray-400 text-base">
+                  Go to your Customer Portal.
                 </p>
               </div>
             </div>
