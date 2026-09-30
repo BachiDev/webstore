@@ -1,60 +1,85 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import Image from 'next/image';
-import { useUser } from '../lib/UserContext';
-import { useCart } from '../lib/CartContext';
-import { useState } from 'react';
-import { User } from 'firebase/auth';
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { useUser } from "../lib/UserContext";
+import { useCart } from "../lib/CartContext";
+import { useEffect, useState } from "react";
+import { Menu, ShoppingCart, X } from "lucide-react";
+import { User } from "firebase/auth";
+import { cn } from "@/lib/cn";
+import { navItems, site } from "@/data/site";
+import { Avatar } from "./ui/Avatar";
 
-interface NavItem {
-  href: string;
-  label: string;
-  authRequired?: boolean;
-  guestOnly?: boolean;
-  roleRequired?: string;
-}
-
-const navItems: NavItem[] = [
-  { href: "/store", label: "Store" },
-  { href: "/subscription", label: "Subscription"},
-];
-
-const roleNavItems: NavItem[] = [
+const roleNavItems = [
   { href: "/content/starter", label: "Starter", roleRequired: "Starter" },
   { href: "/content/pro", label: "Pro", roleRequired: "Pro" },
   { href: "/content/premium", label: "Premium", roleRequired: "Premium" },
 ];
 
-const NavLink = ({ href, children, onClick, className = "" }: { href: string; children: React.ReactNode; onClick?: () => void; className?: string }) => (
-  <Link href={href} onClick={onClick} className={`hover:text-gray-400 ${className}`}>
+const NavLink = ({
+  href,
+  children,
+  onClick,
+  className = "",
+  active = false,
+}: {
+  href: string;
+  children: React.ReactNode;
+  onClick?: () => void;
+  className?: string;
+  active?: boolean;
+}) => (
+  <Link
+    href={href}
+    onClick={onClick}
+    aria-current={active ? "page" : undefined}
+    className={cn(
+      "text-sm font-medium text-zinc-300 underline-offset-4 transition-colors hover:text-white hover:underline",
+      active && "text-white underline",
+      className,
+    )}
+  >
     {children}
   </Link>
 );
 
-const ProfileButton = ({ user, onClick }: { user: User, onClick?: () => void }) => (
-  <Link href="/profile" onClick={onClick} className="flex items-center space-x-2 bg-white text-black hover:text-black hover:bg-gray-200       │
- │       rounded-full p-2 px-4">
-    <Image src={user.photoURL || 'https://www.gravatar.com/avatar/?d=mp'} alt="Profile" width={32} height={32} className="rounded-full" unoptimized/>
-    <span>{user.email || 'Guest'}</span>
+const ProfileButton = ({ user, onClick }: { user: User; onClick?: () => void }) => (
+  <Link
+    href="/profile"
+    onClick={onClick}
+    className="flex items-center gap-2 rounded-full bg-white/5 px-3 py-1.5 text-sm text-zinc-100 ring-1 ring-white/15 transition-colors hover:bg-white/10"
+  >
+    <Avatar user={user} size={24} />
+    <span className="max-w-24 truncate">{user.email || "Guest"}</span>
   </Link>
 );
 
 const LoginButton = ({ onClick }: { onClick?: () => void }) => (
-  <Link href="/auth" onClick={onClick} className="flex items-center space-x-2 bg-white text-black hover:text-blac hover:bg-gray-200           │
- │       rounded-full p-2 px-4">Login</Link>
+  <Link
+    href="/auth"
+    onClick={onClick}
+    className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-brand-500 to-fuchsia-600 px-4 py-2 text-sm font-medium text-white shadow-lg shadow-brand-500/25 transition-colors hover:from-brand-600 hover:to-fuchsia-700"
+  >
+    Login
+  </Link>
 );
 
-const CartIcon = () => {
+const CartIcon = ({ onClick }: { onClick?: () => void }) => {
   const { cartItems } = useCart();
+  const count = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   return (
-    <NavLink href="/cart" className="relative inline-block !block">
-      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 relative" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-      </svg>
-      {cartItems.length > 0 && (
-        <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center z-50 !important">
-          {cartItems.length}
+    <NavLink
+      href="/cart"
+      onClick={onClick}
+      className="relative inline-flex"
+      aria-label={`Cart, ${count} items`}
+    >
+      <ShoppingCart className="h-6 w-6" aria-hidden="true" />
+      {count > 0 && (
+        <span className="absolute -right-2 -top-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-500 px-1 font-mono text-xs font-bold text-white">
+          {count}
         </span>
       )}
     </NavLink>
@@ -63,78 +88,128 @@ const CartIcon = () => {
 
 const Navbar = () => {
   const { user, loading, role } = useUser();
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
-  const toggleMenu = () => setIsOpen(!isOpen);
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isOpen]);
 
-  const filteredNavItems = navItems.filter(item => {
-    if (item.authRequired && !user) return false;
-    if (item.guestOnly && user) return false;
-    if (item.href === '/subscription' && (!user || role)) return false;
+  const filteredNavItems = navItems.filter((item) => {
+    if (item.href === "/subscription" && (!user || role)) return false;
     return true;
   });
 
-  const filteredRoleNavItems = roleNavItems.filter(item => {
+  const filteredRoleNavItems = roleNavItems.filter((item) => {
     if (!user || !role) return false;
-    if (item.roleRequired === 'Starter' && (role === 'Starter' || role === 'Pro' || role === 'Premium')) return true;
-    if (item.roleRequired === 'Pro' && (role === 'Pro' || role === 'Premium')) return true;
-    if (item.roleRequired === 'Premium' && role === 'Premium') return true;
+    if (
+      item.roleRequired === "Starter" &&
+      (role === "Starter" || role === "Pro" || role === "Premium")
+    )
+      return true;
+    if (item.roleRequired === "Pro" && (role === "Pro" || role === "Premium")) return true;
+    if (item.roleRequired === "Premium" && role === "Premium") return true;
     return false;
   });
 
   return (
-    <nav className="bg-gray-900 text-white p-4">
-      <div className="container mx-auto flex justify-between items-center">
-        <NavLink href="/" className="text-2xl font-bold flex items-center space-x-2">
-          <Image src="/logo.png" alt="WebStore Logo" width={32} height={32} unoptimized/>
-          <span>WebStore</span>
+    <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-zinc-950/80 backdrop-blur-sm">
+      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 md:px-6">
+        <NavLink href="/" className="flex items-center gap-2 text-base font-bold text-zinc-100">
+          <Image
+            src="/logo.png"
+            alt={`${site.name} logo`}
+            width={24}
+            height={24}
+            className="h-6 w-6"
+            unoptimized
+          />
+          <span>{site.name}</span>
         </NavLink>
-        <div className="hidden md:flex space-x-4 items-center">
-          {filteredNavItems.map(item => (
-            <NavLink key={item.href} href={item.href}>{item.label}</NavLink>
+        <nav className="hidden items-center gap-4 md:flex" aria-label="Primary">
+          {filteredNavItems.map((item) => (
+            <NavLink key={item.href} href={item.href} active={pathname === item.href}>
+              {item.label}
+            </NavLink>
           ))}
-          {filteredRoleNavItems.map(item => (
-            <NavLink key={item.href} href={item.href}>{item.label}</NavLink>
+          {filteredRoleNavItems.map((item) => (
+            <NavLink key={item.href} href={item.href} active={pathname === item.href}>
+              {item.label}
+            </NavLink>
           ))}
           <CartIcon />
           {loading ? (
-            <div className="flex items-center space-x-2">
-              <span className="w-8 h-8 rounded-full bg-gray-700 animate-pulse"></span>
-              <span className="text-sm text-gray-400">Loading...</span>
-            </div>
+            <span
+              className="h-8 w-24 animate-pulse rounded-full bg-white/10"
+              aria-label="Loading account"
+              role="status"
+            />
           ) : user ? (
             <ProfileButton user={user} />
           ) : (
             <LoginButton />
           )}
-        </div>
-        <div className="md:hidden flex items-center">
+        </nav>
+        <div className="flex items-center gap-2 md:hidden">
           <CartIcon />
-          <button onClick={toggleMenu} className="ml-4">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-            </svg>
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            aria-expanded={isOpen}
+            aria-controls="mobile-menu"
+            aria-label={isOpen ? "Close menu" : "Open menu"}
+            className="flex h-10 w-10 items-center justify-center rounded-md text-zinc-200 hover:bg-white/5"
+          >
+            {isOpen ? (
+              <X className="h-6 w-6" aria-hidden="true" />
+            ) : (
+              <Menu className="h-6 w-6" aria-hidden="true" />
+            )}
           </button>
         </div>
       </div>
       {isOpen && (
-        <div className="md:hidden mt-4">
-          {filteredNavItems.map(item => (
-            <NavLink key={item.href} href={item.href} onClick={toggleMenu} className="block py-2 px-4 hover:bg-gray-700">{item.label}</NavLink>
-          ))}
-          {filteredRoleNavItems.map(item => (
-            <NavLink key={item.href} href={item.href} onClick={toggleMenu} className="block py-2 px-4 hover:bg-gray-700">{item.label}</NavLink>
-          ))}
-          {loading ? (
-            <div className="block py-2 px-4 text-gray-400">Loading...</div>
-          ) : user ? (
-            <ProfileButton user={user} onClick={toggleMenu} />
-          ) : (
-            <LoginButton onClick={toggleMenu} />
-          )}
+        <div id="mobile-menu" className="border-t border-white/10 bg-zinc-950/95 md:hidden">
+          <nav className="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-4" aria-label="Mobile">
+            {filteredNavItems.map((item) => (
+              <NavLink
+                key={item.href}
+                href={item.href}
+                onClick={() => setIsOpen(false)}
+                active={pathname === item.href}
+                className="block rounded-md px-3 py-2 hover:bg-white/5"
+              >
+                {item.label}
+              </NavLink>
+            ))}
+            {filteredRoleNavItems.map((item) => (
+              <NavLink
+                key={item.href}
+                href={item.href}
+                onClick={() => setIsOpen(false)}
+                active={pathname === item.href}
+                className="block rounded-md px-3 py-2 hover:bg-white/5"
+              >
+                {item.label}
+              </NavLink>
+            ))}
+            <div className="px-3 py-2">
+              {loading ? (
+                <span className="text-sm text-zinc-400">Loading…</span>
+              ) : user ? (
+                <ProfileButton user={user} onClick={() => setIsOpen(false)} />
+              ) : (
+                <LoginButton onClick={() => setIsOpen(false)} />
+              )}
+            </div>
+          </nav>
         </div>
       )}
-    </nav>
+    </header>
   );
 };
 

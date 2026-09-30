@@ -1,58 +1,78 @@
-import Image from 'next/image';
-import { Product } from "@invertase/firestore-stripe-payments";
+import Image from "next/image";
+import { Price, Product } from "@invertase/firestore-stripe-payments";
 import { createCheckout } from "@/lib/createCheckout";
 import { useState } from "react";
+import toast from "react-hot-toast";
+import { Button } from "./ui/Button";
+import { Card } from "./ui/Card";
+import { PriceTag } from "./ui/ShopBits";
 
-const SubscriptionCard = ({ product, billingInterval }: { product: Product, billingInterval: "month" | "year" }) => {
+const SubscriptionCard = ({
+  product,
+  billingInterval,
+  planName,
+}: {
+  product: Product;
+  billingInterval: "month" | "year";
+  /** Used for the contextual Stripe return URL (?plan=…). */
+  planName?: string;
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [clickedPriceId, setClickedPriceId] = useState<string | null>(null);
 
   const handleCheckout = async (priceId: string) => {
     setIsLoading(true);
     setClickedPriceId(priceId);
-    await createCheckout(priceId);
-    // No need to reset isLoading here as the page will redirect
+    try {
+      const origin = window.location.origin;
+      const planParam = planName ? `&plan=${encodeURIComponent(planName)}` : "";
+      await createCheckout(priceId, {
+        successUrl: `${origin}/subscription?success=true${planParam}`,
+        cancelUrl: `${origin}/subscription?canceled=true`,
+      });
+      // On success the page redirects to Stripe; loading state intentionally kept.
+    } catch (error) {
+      console.error("Checkout failed:", error);
+      toast.error("Checkout failed. Please try again.");
+      setIsLoading(false);
+      setClickedPriceId(null);
+    }
   };
 
-  const yearlyPrice = product.prices?.find(price => price.interval === "year");
-  const monthlyPrice = product.prices?.find(price => price.interval === "month");
+  const yearlyPrice = product.prices?.find((price) => price.interval === "year");
+  const monthlyPrice = product.prices?.find((price) => price.interval === "month");
+  const activePrice: Price | undefined = billingInterval === "year" ? yearlyPrice : monthlyPrice;
 
   return (
-    <div className="max-w-sm rounded-lg overflow-hidden shadow-lg bg-neutral-900 hover:bg-neutral-700 py-4">
-      {product.images && product.images[0] && <Image src={product.images[0]} alt={product.name!} width={300} height={200} className="w-full h-48 object-cover" />}
-      <div className="px-6 py-4">
-        <div className="text-center font-bold text-xl mb-2">{product.name}</div>
-        <p className="text-gray-400 text-base mb-2 py-4">
-          {product.description}
-        </p>
-      </div>
-      <div className="px-6 py-4">
-        {billingInterval === "year" && yearlyPrice && (
-          <div className="text-center">
-            <p className="text-white text-lg font-bold">€ {yearlyPrice.unit_amount! / 100} / year</p>
-            <button
-              onClick={() => handleCheckout(yearlyPrice.id)}
-              className="bg-white hover:bg-neutral-300 text-black font-bold py-2 px-4 rounded mt-4 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={isLoading}
-            >
-              {isLoading && clickedPriceId === yearlyPrice.id ? "Please wait..." : "Buy Now"}
-            </button>
-          </div>
-        )}
-        {billingInterval === "month" && monthlyPrice && (
-          <div className="text-center">
-            <p className="text-white text-lg font-bold">€ {monthlyPrice.unit_amount! / 100} / month</p>
-            <button
-              onClick={() => handleCheckout(monthlyPrice.id)}
-              className="bg-white hover:bg-neutral-300 text-black font-bold py-2 px-4 rounded mt-4 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={isLoading}
-            >
-              {isLoading && clickedPriceId === monthlyPrice.id ? "Please wait..." : "Buy Now"}
-            </button>
+    <Card className="overflow-hidden p-0">
+      {product.images && product.images[0] && (
+        <Image
+          src={product.images[0]}
+          alt={product.name ?? "Subscription plan image"}
+          width={400}
+          height={300}
+          className="aspect-[4/3] w-full object-cover"
+          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          unoptimized
+        />
+      )}
+      <div className="flex grow flex-col items-center gap-3 p-6 text-center">
+        <div className="font-bold text-xl text-zinc-100">{product.name}</div>
+        <p className="text-sm leading-relaxed text-zinc-400">{product.description}</p>
+        {activePrice && (
+          <div className="mt-auto flex flex-col items-center gap-3 pt-2">
+            <PriceTag
+              unitAmount={activePrice.unit_amount}
+              currency={activePrice.currency}
+              interval={billingInterval === "year" ? "year" : "month"}
+            />
+            <Button onClick={() => handleCheckout(activePrice.id)} disabled={isLoading}>
+              {isLoading && clickedPriceId === activePrice.id ? "Please wait..." : "Buy Now"}
+            </Button>
           </div>
         )}
       </div>
-    </div>
+    </Card>
   );
 };
 

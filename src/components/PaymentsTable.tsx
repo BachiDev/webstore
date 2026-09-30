@@ -1,39 +1,45 @@
 "use client";
 
 import { Payment } from "@invertase/firestore-stripe-payments";
+import { DataTable } from "./ui/DataTable";
+import { Pill } from "./ui/Pill";
+import { formatDate, formatPrice } from "@/lib/format";
 
 interface PaymentsTableProps {
   payments: Payment[];
 }
 
 const PaymentsTable = ({ payments }: PaymentsTableProps) => {
+  const rows = payments.filter((payment) => payment.amount && payment.created);
   return (
-    <div className="m-4 text-black">
-      <h2 className="text-xl font-bold mb-4">Payments</h2>
-      <table className="w-full border-collapse">
-        <thead>
-          <tr>
-            <th className="p-2 border">Date</th>
-            <th className="p-2 border">Amount</th>
-            <th className="p-2 border">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {payments.filter((payment) => payment.amount && payment.created).map((payment) => (
-            <tr key={payment.id}>
-              <td className="p-2 border">
-                {new Date(payment.created).toLocaleDateString()}
-              </td>
-              <td className="p-2 border">
-                {(payment.amount / 100).toFixed(2)}{" "}
-                {payment.currency?.toUpperCase() || ""}
-              </td>
-              <td className="p-2 border">{payment.status}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <section aria-labelledby="payments-heading" className="mt-8 w-full">
+      <h2 id="payments-heading" className="mb-4 text-xl font-bold text-zinc-100">
+        Payments
+      </h2>
+      <DataTable
+        caption="Payment history"
+        rows={rows}
+        columns={[
+          {
+            key: "date",
+            header: "Date",
+            render: (payment) => formatDate(payment.created),
+          },
+          {
+            key: "amount",
+            header: "Amount",
+            render: (payment) => (
+              <span className="font-mono">{formatPrice(payment.amount, payment.currency)}</span>
+            ),
+          },
+          {
+            key: "status",
+            header: "Status",
+            render: (payment) => <Pill>{payment.status}</Pill>,
+          },
+        ]}
+      />
+    </section>
   );
 };
 

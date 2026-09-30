@@ -1,9 +1,10 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import { useUser } from '../lib/UserContext';
-import type { ComponentType, FC } from 'react';
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { useUser } from "../lib/UserContext";
+import type { ComponentType, FC } from "react";
+import { Skeleton } from "./ui/ShopBits";
 
 const withAuth = <P extends object>(WrappedComponent: ComponentType<P>): FC<P> => {
   const WithAuthComponent: FC<P> = (props) => {
@@ -12,22 +13,26 @@ const withAuth = <P extends object>(WrappedComponent: ComponentType<P>): FC<P> =
 
     useEffect(() => {
       if (!loading && !user) {
-        router.push('/auth');
+        router.push("/auth");
       }
     }, [user, loading, router]);
 
     if (loading) {
-      return <div>Loading...</div>; // Or a spinner component
+      return (
+        <div className="mx-auto w-full max-w-6xl px-4 py-12" role="status" aria-label="Loading">
+          <Skeleton className="h-64" />
+        </div>
+      );
     }
 
     if (!user) {
-      return null; // Or a redirect component
+      return null; // Redirecting to /auth via the effect above.
     }
 
     return <WrappedComponent {...props} />;
   };
 
-  WithAuthComponent.displayName = `withAuth(${(WrappedComponent.displayName || WrappedComponent.name || 'Component')})`;
+  WithAuthComponent.displayName = `withAuth(${WrappedComponent.displayName || WrappedComponent.name || "Component"})`;
 
   return WithAuthComponent;
 };

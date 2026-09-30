@@ -1,32 +1,31 @@
-'use client';
+"use client";
 
-import { UserProvider } from '../lib/UserContext';
-import { CartProvider } from '../lib/CartContext';
-import { Toaster } from 'react-hot-toast';
-import Navbar from './Navbar';
-import Footer from './Footer';
-import FloatingActionButton from './FloatingActionButton';
-
-// Import the necessary components and the 'ui' object from your setup file
-import { ConfigProvider } from '@firebase-ui/react';
-import { ui } from '../lib/firebase'; // Adjust the import path as needed
+import { UserProvider } from "../lib/UserContext";
+import { CartProvider } from "../lib/CartContext";
+import { Toaster } from "react-hot-toast";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
-    // Wrap your entire app with the FirebaseUI ConfigProvider
-    <ConfigProvider ui={ui}>
-      <CartProvider>
-        <UserProvider>
-          <Navbar />
-          <Toaster />
-          <div className="flex-grow">
-            {children}
-          </div>
-          <Footer />
-          <FloatingActionButton />
-        </UserProvider>
-      </CartProvider>
-    </ConfigProvider>
+    <CartProvider>
+      <UserProvider>
+        <Navbar />
+        <Toaster
+          toastOptions={{
+            style: {
+              background: "#18181b",
+              color: "#f4f4f5",
+              border: "1px solid rgba(255,255,255,0.1)",
+            },
+          }}
+        />
+        <main id="main" className="flex-grow">
+          {children}
+        </main>
+        <Footer />
+      </UserProvider>
+    </CartProvider>
   );
 };
 

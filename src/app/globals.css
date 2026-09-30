@@ -1,25 +1,73 @@
 @import "tailwindcss";
-@import "@firebase-ui/styles/src/base.css";
 
-:root {
-  --foreground-rgb: #ffffff;
-  --background-start-rgb: #ffffffff;
-  --background-end-rgb: #ffffffff; 
-  --navbar-background-rgb: #1c1c1c;
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-brand-300: #c4b5fd;
+  --color-brand-400: #a78bfa;
+  --color-brand-500: #8b5cf6;
+  --color-brand-600: #7c3aed;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 body {
-  color: var(--foreground-rgb); 
-  background: var(--background-start-rgb); 
-  font-family: var(--font-geist-mono);
+  background-color: var(--color-zinc-950);
+  color: var(--color-zinc-100);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
 }
 
-nav {
-   background-color: var(--navbar-background-rgb);   
+:focus-visible {
+  outline: 2px solid var(--color-brand-400);
+  outline-offset: 2px;
+}
+
+/* Skip link: hidden until focused. */
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: 1rem;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  background-color: var(--color-brand-600);
+  color: #fff;
+  font-size: 0.875rem;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 1rem;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  .bg-grid-pattern {
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.06) 1px, transparent 1px);
+    background-size: 2rem 2rem;
+  }
+}
+
+/* Scroll reveals stay visible for reduced-motion users (and no-JS via noscript). */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none;
   }
 }

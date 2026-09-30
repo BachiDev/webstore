@@ -1,19 +1,70 @@
 rules_version = '2';
 
+// Webstore demo — least-privilege rules (Phase 0).
+//
+// Collections in use (Run Payments with Stripe extension + demo content):
+// - products + products/{id}/prices          public catalog, read-only from clients
+// - customers/{uid} + checkout_sessions/
+//   subscriptions/ payments subcollections    per-user, owner-only
+// - content-starter|content-pro|content-premium  demo gated content.
+//
+// Role gating note: the Stripe extension stores the subscription role at
+// customers/{uid}/subscriptions/{subId}.role. True role-based Firestore
+// enforcement needs either custom claims or a get()-join per content doc,
+// which costs an extra read per check. For this demo we gate reads on
+// "signed in" (incl. anonymous) and enforce the Starter/Pro/Premium
+// hierarchy in the client (useRole.ts + GatedPage). See PLAN.md §6.2.1.
+// Everything else is denied by default.
+
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // This rule allows anyone with your Firestore database reference to view, edit,
-    // and delete all data in your Firestore database. It is useful for getting
-    // started, but it is configured to expire after 30 days because it
-    // leaves your app open to attackers. At that time, all client
-    // requests to your Firestore database will be denied.
-    //
-    // Make sure to write security rules for your app before that time, or else
-    // all client requests to your Firestore database will be denied until you Update
-    // your rules
+    // Public product catalog (written by Stripe extension / admin SDK only).
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if false;
+
+      match /prices/{priceId} {
+        allow read: if true;
+        allow write: if false;
+      }
+    }
+
+    // Per-user Stripe data — owner only (anon UID or permanent UID).
+    match /customers/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+
+      match /checkout_sessions/{docId} {
+        allow read, write: if request.auth != null && request.auth.uid == uid;
+      }
+      match /subscriptions/{docId} {
+        allow read: if request.auth != null && request.auth.uid == uid;
+        allow write: if false; // written by Stripe extension only
+      }
+      match /payments/{docId} {
+        allow read: if request.auth != null && request.auth.uid == uid;
+        allow write: if false; // written by Stripe extension only
+      }
+    }
+
+    // Demo gated content — signed-in read, no client writes.
+    // Client enforces role hierarchy; rules are the signed-in backstop.
+    match /content-starter/{docId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+    match /content-pro/{docId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+    match /content-premium/{docId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+
+    // Default deny.
     match /{document=**} {
-      allow read, write: if request.time < timestamp.date(2025, 8, 11);
+      allow read, write: if false;
     }
   }
 }

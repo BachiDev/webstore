@@ -1,9 +1,10 @@
 // src/lib/UserContext.tsx
-import { createContext, useContext, useState, useEffect } from 'react';
-import { onAuthStateChanged, signInAnonymously } from 'firebase/auth';
-import { auth, payments } from './firebase';
-import type { User } from 'firebase/auth';
-import { getCurrentUserSubscriptions } from '@invertase/firestore-stripe-payments';
+import { createContext, useContext, useState, useEffect } from "react";
+import { onAuthStateChanged, signInAnonymously } from "firebase/auth";
+import { auth, payments } from "./firebase";
+import type { User } from "firebase/auth";
+import { getCurrentUserSubscriptions } from "@invertase/firestore-stripe-payments";
+import { pickHighestRole } from "./roles";
 
 interface UserContextType {
   user: User | null;
@@ -20,24 +21,26 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (authUser) => {
-      const loggedOut = localStorage.getItem('logged_out');
+      const loggedOut = localStorage.getItem("logged_out");
       if (authUser) {
-        localStorage.removeItem('logged_out');
+        localStorage.removeItem("logged_out");
 
-        const subscriptions = await getCurrentUserSubscriptions(payments, {
-          status: 'active',
-        });
+        try {
+          const subscriptions = await getCurrentUserSubscriptions(payments, {
+            status: "active",
+          });
 
-        if (subscriptions.length > 0) {
-          setRole(subscriptions[0].role);
-        } else {
+          // Highest rank wins when a customer holds several subscriptions.
+          setRole(pickHighestRole(subscriptions.map((s) => s.role)));
+        } catch (error) {
+          console.error("Failed to fetch role subscriptions:", error);
           setRole(null);
         }
         setUser(authUser);
       } else {
-        if (loggedOut !== 'true') {
+        if (loggedOut !== "true") {
           signInAnonymously(auth).catch((error) => {
-            console.error('Anonymous sign-in failed:', error);
+            console.error("Anonymous sign-in failed:", error);
           });
         }
         setUser(null);
@@ -48,11 +51,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     return () => unsubscribe();
   }, []);
 
-  return (
-    <UserContext.Provider value={{ user, loading, role }}>
-      {children}
-    </UserContext.Provider>
-  );
+  return <UserContext.Provider value={{ user, loading, role }}>{children}</UserContext.Provider>;
 };
 
 export const useUser = () => useContext(UserContext);

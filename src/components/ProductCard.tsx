@@ -1,48 +1,67 @@
-import Image from 'next/image';
-import {Price, Product} from "@invertase/firestore-stripe-payments";
-import { useCart } from '../lib/CartContext';
-import { useState } from 'react';
+import Image from "next/image";
+import Link from "next/link";
+import { Price, Product } from "@invertase/firestore-stripe-payments";
+import { useCart } from "../lib/CartContext";
+import { useState } from "react";
+import { ShoppingCart } from "lucide-react";
+import { Button } from "./ui/Button";
+import { Card } from "./ui/Card";
+import { PriceTag, QtyStepper } from "./ui/ShopBits";
 
-
-const ProductCard = ({ name, description, images, prices }: Product) => {
+const ProductCard = ({ id, name, description, images, prices }: Product) => {
   const { addToCart } = useCart();
-  const [quantity, setQuantity] = useState(1);
+  // Per-price quantities — the old shared `quantity` state leaked across prices.
+  const [quantities, setQuantities] = useState<Record<string, number>>({});
+
+  const qtyFor = (priceId: string) => quantities[priceId] ?? 1;
 
   return (
-    <div className="max-w-sm rounded-lg overflow-hidden shadow-lg bg-neutral-900 hover:bg-neutral-700">
-      {images && images[0] && <Image src={images[0]} alt={name!} width={300} height={200} className="w-full h-48 object-cover" unoptimized/>}
-      <div className="px-6 py-4">
-        <div className="font-bold text-xl mb-2">{name}</div>
-        <p className="text-gray-400 text-base mb-2">
-          {description}
-        </p>
+    <Card className="overflow-hidden p-0">
+      {images && images[0] && (
+        <Image
+          src={images[0]}
+          alt={name ?? "Product image"}
+          width={400}
+          height={300}
+          className="aspect-[4/3] w-full object-cover"
+          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 25vw"
+          unoptimized
+        />
+      )}
+      <div className="flex grow flex-col gap-3 p-6">
+        <Link
+          href={`/store/${id}`}
+          className="font-bold text-xl text-zinc-100 underline-offset-4 hover:text-white hover:underline"
+        >
+          {name}
+        </Link>
+        <p className="text-zinc-400 text-sm leading-relaxed">{description}</p>
+        <div className="mt-auto flex flex-col gap-4 pt-2">
+          {prices
+            ?.filter((price) => price.active)
+            .map((price: Price) => (
+              <div key={price.id} className="flex flex-col items-start gap-2">
+                <PriceTag
+                  unitAmount={price.unit_amount}
+                  currency={price.currency}
+                  interval={price.interval}
+                />
+                <div className="flex flex-wrap items-center gap-2">
+                  <QtyStepper
+                    id={`quantity-${id}-${price.id}`}
+                    value={qtyFor(price.id)}
+                    onChange={(next) => setQuantities((prev) => ({ ...prev, [price.id]: next }))}
+                  />
+                  <Button size="sm" onClick={() => addToCart(price.id, qtyFor(price.id))}>
+                    <ShoppingCart className="h-4 w-4" aria-hidden="true" />
+                    Add to Cart
+                  </Button>
+                </div>
+              </div>
+            ))}
+        </div>
       </div>
-      <div className="px-6 py-4">
-        {prices?.filter(price => price.active).map((price: Price) => (
-          <div key={price.id} className="flex flex-col items-start">
-            <p className="text-white text-lg font-bold mb-2">€ {(price.unit_amount! / 100).toFixed(2)}</p>
-            <div className="flex items-center space-x-2">
-              <input
-                type="number"
-                min="1"
-                max="99"
-                value={quantity}
-                onChange={(e) => {
-                  const value = Number(e.target.value);
-                  if (value >= 1 && value <= 99) {
-                    setQuantity(value);
-                  }
-                }}
-                className="w-16 p-2 border rounded text-white bg-neutral-800"
-              />
-              <button onClick={() => addToCart(price.id, quantity)} className="bg-white hover:bg-neutral-300 text-black font-bold py-2 px-4 rounded cursor-pointer">
-                Add to Cart
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+    </Card>
   );
 };
 

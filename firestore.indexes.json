@@ -1,4 +1,8 @@
 {
+  // No composite indexes required (Phase 0).
+  // The subscription catalog intentionally fetches active products and filters
+  // on metadata.firebaseRole client-side instead of a `!= null` Firestore
+  // query, so no single-field exemption or composite index is needed.
   "indexes": [],
   "fieldOverrides": []
 }
