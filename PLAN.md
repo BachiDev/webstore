@@ -342,7 +342,11 @@ Current `firestore.rules` denies everything (expired `timestamp.date(2025, 8, 11
 
 ### Test slice (done 2026-10-01, from code review)
 
-- [x] Vitest 3 + `@firebase/rules-unit-testing` v4 (both pinned for firebase 11 / node-20-compat); `vitest.config.ts` (node env, `@` alias). Unit suite `npm test` (19 tests, runs in CI): roles, format, auth-error copy, cart validation, checkout URLs. Rules suite `npm run test:rules` (9 tests vs emulator, local/pre-deploy only — not CI). Testability refactors: exported `isValidCartItem`, pure `buildCheckoutUrls(origin, opts)`. `tests/` added to tsconfig so suites typecheck.
+- [x] Vitest 3 + `@firebase/rules-unit-testing` v4 (both pinned for firebase 11 / node-20-compat); `vitest.config.ts` (node env, `@` alias). Unit suite `npm test` (24 tests incl. Avatar fallbacks, runs in CI): roles, format, auth-error copy, cart validation, checkout URLs, avatar resolution. Rules suite `npm run test:rules` (9 tests vs emulator, local/pre-deploy only — not CI). Testability refactors: exported `isValidCartItem`, pure `buildCheckoutUrls(origin, opts)`. `tests/` added to tsconfig so suites typecheck.
+
+### Deploy fix (2026-10-01) — Next.js CVE gate
+
+- [x] Hosting deploy refused Next 15.5.0 (`CVE-2025-66478`, enforced by firebase-tools at deploy time). Upgraded `next` + `eslint-config-next` to 15.5.27 (stayed on 15.5 minor to limit churn). Added `.github/dependabot.yml` (weekly npm incl. Next.js group, monthly actions) so security patches arrive as PRs instead of failing deploys.
 
 ### Phase 4 — Launch & iterate (ongoing)
 
