@@ -13,6 +13,20 @@ updates:
         patterns:
           - "next"
           - "eslint-config-next"
+      # react + react-dom (+ types) must move as one — split bumps fail the
+      # build with "Incompatible React versions".
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+    ignore:
+      # firebase 12 breaks the archived Stripe lib and the pinned
+      # rules-testing peer (both need firebase ^11). Major upgrade is a
+      # deliberate Phase 4 task, not a bot PR.
+      - dependency-name: "firebase"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:

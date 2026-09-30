@@ -347,6 +347,7 @@ Current `firestore.rules` denies everything (expired `timestamp.date(2025, 8, 11
 ### Deploy fix (2026-10-01) — Next.js CVE gate
 
 - [x] Hosting deploy refused Next 15.5.0 (`CVE-2025-66478`, enforced by firebase-tools at deploy time). Upgraded `next` + `eslint-config-next` to 15.5.27 (stayed on 15.5 minor to limit churn). Added `.github/dependabot.yml` (weekly npm incl. Next.js group, monthly actions) so security patches arrive as PRs instead of failing deploys.
+- [x] Dependabot follow-up fixes: react + react-dom aligned at 19.3.0 (split bumps fail the build); `react` group added so the pair moves together; firebase semver-major ignored (v12 breaks archived peers — deliberate Phase 4 task); preview deploys skipped for `dependabot[bot]` (no secret access, CI signal suffices).
 
 ### Phase 4 — Launch & iterate (ongoing)
 

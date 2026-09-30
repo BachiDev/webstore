@@ -18,7 +18,10 @@ jobs:
       - run: npm run lint
       - run: npm test
       - run: npm run build
+      # No preview deploy for Dependabot PRs: bot runs can't access the
+      # service-account secret, and version bumps only need the CI signal.
       - uses: FirebaseExtended/action-hosting-deploy@v0
+        if: github.actor != 'dependabot[bot]'
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_BACHIDEV_WEBSTORE }}
