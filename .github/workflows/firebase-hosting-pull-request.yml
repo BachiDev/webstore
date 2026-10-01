@@ -28,5 +28,7 @@ jobs:
           projectId: bachidev-webstore
           # Pinned: see merge workflow (firebase-tools 15.x breaks the build).
           firebaseToolsVersion: 14.27.0
+          # Same cleanup-policy auto-approval as the merge workflow.
+          force: true
         env:
           FIREBASE_CLI_EXPERIMENTS: webframeworks

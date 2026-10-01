@@ -26,5 +26,8 @@ jobs:
           # this app (esbuild `external` failure); 14.x deployed fine.
           # Don't float `latest` on the deploy path.
           firebaseToolsVersion: 14.27.0
+          # Auto-approves the Artifact Registry cleanup policy for function
+          # images (keeps old containers from piling up costs).
+          force: true
         env:
           FIREBASE_CLI_EXPERIMENTS: webframeworks
