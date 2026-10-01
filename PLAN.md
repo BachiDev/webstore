@@ -346,11 +346,11 @@ Current `firestore.rules` denies everything (expired `timestamp.date(2025, 8, 11
 
 ### Deploy fix (2026-10-01) — Next.js CVE gate
 
-### Deploy saga (2026-09-30 / 2026-10-01)
+### Deploy saga (done 2026-10-01 — pipeline green, site live)
 
 - [x] Hosting deploy refused Next 15.5.0 (`CVE-2025-66478`). Upgraded `next` + `eslint-config-next` to 15.5.27. Added `.github/dependabot.yml` (react grouped, firebase major ignored).
-- [x] firebase-tools 15.x webframeworks build broke on the repo's hoisted esbuild 0.28.2 (vitest dep). Pinned root `esbuild@0.19.12` (vite keeps nested 0.28.2) — warning gone, then pinned `firebaseToolsVersion: 14.27.0` (last known-good family; 15.x frameworks support is experimental).
-- [ ] **Open:** deploy SA needs `firebaseextensions.instances.list` (403 on extension-instances discovery). Grant the GitHub deploy service account the **Firebase Extensions Viewer** role (`roles/firebaseextensions.viewer`) in Cloud Console → IAM (or via gcloud, see below), then re-run the failed workflow. Runtimeconfig 403s in the log are non-fatal noise.
+- [x] firebase-tools 15.x webframeworks build broke on the repo's hoisted esbuild 0.28.2 (vitest dep). Pinned root `esbuild@0.19.12` (vite keeps nested 0.28.2), then pinned `firebaseToolsVersion: 14.27.0` (last known-good family).
+- [x] Project-setup gaps (all owner-side, all resolved): deploy SA got Firebase Extensions Viewer + Cloud Functions Admin + Cloud Run Admin + Service Account User; enabled run/eventarc/artifactregistry/cloudbuild/billing APIs; Blaze confirmed. Last failure was only the Artifact Registry cleanup-policy prompt — fixed with `force: true` on the deploy action (also caps image-storage cost creep).
 - [x] Dependabot follow-up fixes: react + react-dom aligned at 19.3.0 (split bumps fail the build); `react` group added so the pair moves together; firebase semver-major ignored (v12 breaks archived peers — deliberate Phase 4 task); preview deploys skipped for `dependabot[bot]` (no secret access, CI signal suffices).
 
 ### Phase 4 — Launch & iterate (ongoing)
