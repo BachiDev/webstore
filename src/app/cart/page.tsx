@@ -182,6 +182,7 @@ const CartPageInner = () => {
                         height={80}
                         className="h-20 w-20 rounded-lg object-cover"
                         sizes="80px"
+                        unoptimized // Firebase tools 14.x ignores remotePatterns on Next 15.5
                       />
                     )}
                     <div className="flex flex-col gap-1">

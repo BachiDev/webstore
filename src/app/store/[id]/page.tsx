@@ -89,6 +89,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
               className="aspect-[4/3] w-full rounded-xl border border-white/10 object-cover"
               sizes="(max-width: 768px) 100vw, 50vw"
               priority
+              unoptimized // Firebase tools 14.x ignores remotePatterns on Next 15.5
             />
           ) : (
             <div className="flex aspect-[4/3] w-full items-center justify-center rounded-xl border border-dashed border-white/15 text-sm text-zinc-400">
@@ -106,6 +107,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                   height={90}
                   className="h-20 w-28 rounded-lg border border-white/10 object-cover"
                   sizes="112px"
+                  unoptimized // Firebase tools 14.x ignores remotePatterns on Next 15.5
                 />
               ))}
             </div>

@@ -53,6 +53,7 @@ const SubscriptionCard = ({
           height={300}
           className="aspect-[4/3] w-full object-cover"
           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          unoptimized // Firebase tools 14.x ignores remotePatterns on Next 15.5 — optimizer 400s live
         />
       )}
       <div className="flex grow flex-col items-center gap-3 p-6 text-center">

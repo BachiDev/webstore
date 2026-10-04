@@ -343,7 +343,7 @@ Current `firestore.rules` denies everything (expired `timestamp.date(2025, 8, 11
 ### Perf slice (done — catalog cache, optimizer images, headers)
 
 - [x] `src/lib/catalog.ts`: 60s TTL + in-flight dedupe around `getProducts`; all 5 catalog consumers (store, subscriptions, cart, detail, featured) share it via `oneTimeProducts`/`subscriptionProducts` helpers. Cuts repeat-visit latency and billed Firestore reads. 6 tests (`catalog.test.ts`).
-- [x] Dropped `unoptimized` on product images (remotePatterns already covered them) so the optimizer resizes Stripe CDN files; avatars/logo stay unoptimized (tiny/user-specific, avoids optimizer invocations). Verify LCP on preview channel.
+- [x] Tried dropping `unoptimized` on product images so the optimizer resizes Stripe CDN files — **reverted**: verified locally (200) but Firebase tools 14.x serves 400 `"url" parameter is not allowed` live, i.e. it ignores `remotePatterns` on Next 15.5 (its own warning says 14.x supports Next only up to 15.0). Product images stay direct CDN loads; retry optimizer when deploy tooling supports Next 15.5+. Avatars/logo were always unoptimized.
 - [x] Hardening: `poweredByHeader: false` + Hosting security headers (`nosniff`, strict referrer, `DENY` framing — no iframes in-app, Stripe/Google are redirects/popups, Permissions-Policy lockdown).
 
 ### Test slice (done 2026-10-01, from code review)
