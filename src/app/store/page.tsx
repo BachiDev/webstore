@@ -121,8 +121,8 @@ const StorePage = () => {
               {visible.length} of {products.length} products
             </p>
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {visible.map((product) => (
-                <ProductCard key={product.id} {...product} />
+              {visible.map((product, i) => (
+                <ProductCard key={product.id} {...product} eager={i === 0} />
               ))}
             </div>
           </>

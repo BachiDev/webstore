@@ -11,11 +11,14 @@ const SubscriptionCard = ({
   product,
   billingInterval,
   planName,
+  eager = false,
 }: {
   product: Product;
   billingInterval: "month" | "year";
   /** Used for the contextual Stripe return URL (?plan=…). */
   planName?: string;
+  /** First grid image: preload eagerly (page LCP). */
+  eager?: boolean;
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [clickedPriceId, setClickedPriceId] = useState<string | null>(null);
@@ -53,6 +56,8 @@ const SubscriptionCard = ({
           height={300}
           className="aspect-[4/3] w-full object-cover"
           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          priority={eager}
+          fetchPriority={eager ? "high" : undefined}
           unoptimized // Firebase tools 14.x ignores remotePatterns on Next 15.5 — optimizer 400s live
         />
       )}

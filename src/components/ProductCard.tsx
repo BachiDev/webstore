@@ -8,7 +8,14 @@ import { Button } from "./ui/Button";
 import { Card } from "./ui/Card";
 import { PriceTag, QtyStepper } from "./ui/ShopBits";
 
-const ProductCard = ({ id, name, description, images, prices }: Product) => {
+const ProductCard = ({
+  id,
+  name,
+  description,
+  images,
+  prices,
+  eager = false,
+}: Product & { eager?: boolean }) => {
   const { addToCart } = useCart();
   // Per-price quantities — the old shared `quantity` state leaked across prices.
   const [quantities, setQuantities] = useState<Record<string, number>>({});
@@ -25,6 +32,8 @@ const ProductCard = ({ id, name, description, images, prices }: Product) => {
           height={300}
           className="aspect-[4/3] w-full object-cover"
           sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 25vw"
+          priority={eager}
+          fetchPriority={eager ? "high" : undefined}
           unoptimized // Firebase tools 14.x ignores remotePatterns on Next 15.5 — optimizer 400s live
         />
       )}

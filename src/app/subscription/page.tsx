@@ -121,7 +121,7 @@ const SubscriptionPageInner = () => {
           <EmptyState title="No plans yet" lede="Check back soon — plans are managed via Stripe." />
         ) : (
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {products.map((product) => {
+            {products.map((product, i) => {
               const planRole =
                 typeof product.metadata?.firebaseRole === "string"
                   ? product.metadata.firebaseRole
@@ -138,6 +138,7 @@ const SubscriptionPageInner = () => {
                     product={product}
                     billingInterval={billingInterval}
                     planName={planRole ?? undefined}
+                    eager={i === 0}
                   />
                 </div>
               );

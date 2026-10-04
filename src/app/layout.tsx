@@ -75,6 +75,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      {/* Product images load straight from the Stripe CDN (no optimizer on
+          this stack) — preconnect once so the LCP image skips DNS+TLS. */}
+      <link rel="preconnect" href="https://files.stripe.com" />
       <body
         className={`${inter.variable} ${geistMono.variable} flex min-h-screen flex-col antialiased`}
       >

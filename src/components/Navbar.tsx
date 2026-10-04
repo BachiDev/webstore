@@ -24,17 +24,20 @@ const NavLink = ({
   onClick,
   className = "",
   active = false,
+  ariaLabel,
 }: {
   href: string;
   children: React.ReactNode;
   onClick?: () => void;
   className?: string;
   active?: boolean;
+  ariaLabel?: string;
 }) => (
   <Link
     href={href}
     onClick={onClick}
     aria-current={active ? "page" : undefined}
+    aria-label={ariaLabel}
     className={cn(
       "text-sm font-medium text-zinc-300 underline-offset-4 transition-colors hover:text-white hover:underline",
       active && "text-white underline",
@@ -74,7 +77,7 @@ const CartIcon = ({ onClick }: { onClick?: () => void }) => {
       href="/cart"
       onClick={onClick}
       className="relative inline-flex"
-      aria-label={`Cart, ${count} items`}
+      ariaLabel={`Cart, ${count} items`}
     >
       <ShoppingCart className="h-6 w-6" aria-hidden="true" />
       {count > 0 && (
@@ -122,7 +125,7 @@ const Navbar = () => {
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 md:px-6">
         <NavLink href="/" className="flex items-center gap-2 text-base font-bold text-zinc-100">
           <Image
-            src="/logo.png"
+            src="/logo-64.webp"
             alt={`${site.name} logo`}
             width={24}
             height={24}
