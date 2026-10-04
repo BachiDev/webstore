@@ -1,6 +1,7 @@
 // next.config.mjs or next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  poweredByHeader: false,
   images: {
     remotePatterns: [
       {

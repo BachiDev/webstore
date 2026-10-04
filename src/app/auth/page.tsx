@@ -61,6 +61,10 @@ const AuthPage = () => {
     setIsGuestLoading(true);
     try {
       await signInAnonymously(auth);
+      // Anonymous guests stay on /auth by design (withGuest only redirects
+      // permanent accounts), so navigate out — otherwise the button spins
+      // forever on its loading state.
+      router.push("/");
     } catch (error) {
       console.error("Error during anonymous sign-in:", error);
       toast.error("Guest login failed. Please try again.");

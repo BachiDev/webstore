@@ -4,8 +4,8 @@ import { useCart } from "../../lib/CartContext";
 import Image from "next/image";
 import { Suspense, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { getProducts, Product, Price } from "@invertase/firestore-stripe-payments";
-import { payments } from "@/lib/firebase";
+import type { Product, Price } from "@invertase/firestore-stripe-payments";
+import { getCatalog } from "@/lib/catalog";
 import { createCartCheckout } from "@/lib/createCheckout";
 import toast from "react-hot-toast";
 import { CheckCircle2, Trash2, XCircle } from "lucide-react";
@@ -42,10 +42,7 @@ const CartPageInner = () => {
       }
 
       try {
-        const allProducts = await getProducts(payments, {
-          includePrices: true,
-          activeOnly: true,
-        });
+        const allProducts = await getCatalog();
 
         const productsInCart: CartProduct[] = [];
         let currentTotal = 0;
@@ -179,7 +176,6 @@ const CartPageInner = () => {
                   <div className="flex items-center gap-4">
                     {product.images && product.images[0] && (
                       <Image
-                        unoptimized
                         src={product.images[0]}
                         alt={product.name ?? "Product image"}
                         width={80}

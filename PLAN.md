@@ -340,11 +340,15 @@ Current `firestore.rules` denies everything (expired `timestamp.date(2025, 8, 11
 - [x] Removed unused root `firebase-admin`/`firebase-functions` deps (only `functions/` needs them).
 - [x] Requires Firebase console setup (documented in README): enable Google provider + Email-link toggle, confirm authorized domains. Old decision §9 #3 resolved as **replace**, not pin.
 
+### Perf slice (done — catalog cache, optimizer images, headers)
+
+- [x] `src/lib/catalog.ts`: 60s TTL + in-flight dedupe around `getProducts`; all 5 catalog consumers (store, subscriptions, cart, detail, featured) share it via `oneTimeProducts`/`subscriptionProducts` helpers. Cuts repeat-visit latency and billed Firestore reads. 6 tests (`catalog.test.ts`).
+- [x] Dropped `unoptimized` on product images (remotePatterns already covered them) so the optimizer resizes Stripe CDN files; avatars/logo stay unoptimized (tiny/user-specific, avoids optimizer invocations). Verify LCP on preview channel.
+- [x] Hardening: `poweredByHeader: false` + Hosting security headers (`nosniff`, strict referrer, `DENY` framing — no iframes in-app, Stripe/Google are redirects/popups, Permissions-Policy lockdown).
+
 ### Test slice (done 2026-10-01, from code review)
 
 - [x] Vitest 3 + `@firebase/rules-unit-testing` v4 (both pinned for firebase 11 / node-20-compat); `vitest.config.ts` (node env, `@` alias). Unit suite `npm test` (24 tests incl. Avatar fallbacks, runs in CI): roles, format, auth-error copy, cart validation, checkout URLs, avatar resolution. Rules suite `npm run test:rules` (9 tests vs emulator, local/pre-deploy only — not CI). Testability refactors: exported `isValidCartItem`, pure `buildCheckoutUrls(origin, opts)`. `tests/` added to tsconfig so suites typecheck.
-
-### Deploy fix (2026-10-01) — Next.js CVE gate
 
 ### Deploy saga (done 2026-10-01 — pipeline green, site live)
 

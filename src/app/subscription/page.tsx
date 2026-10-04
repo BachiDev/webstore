@@ -1,8 +1,8 @@
 "use client";
 
-import { payments } from "@/lib/firebase";
+import { getCatalog, subscriptionProducts } from "@/lib/catalog";
 import SubscriptionCard from "../../components/SubscriptionCard";
-import { getProducts, Product } from "@invertase/firestore-stripe-payments";
+import type { Product } from "@invertase/firestore-stripe-payments";
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { CheckCircle2, XCircle } from "lucide-react";
@@ -27,22 +27,9 @@ const SubscriptionPageInner = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        // Fetch active products and filter client-side instead of a
-        // `metadata.firebaseRole != null` Firestore query — avoids the
-        // composite-index requirement (see firestore.indexes.json).
-        const allProducts = await getProducts(payments, {
-          includePrices: true,
-          activeOnly: true,
-        });
-        const subscriptionProducts = allProducts.filter(
-          (product) => product.metadata?.firebaseRole != null,
-        );
-        subscriptionProducts.sort((a, b) => {
-          const aPrice = a.prices?.find((price) => price.interval === "year")?.unit_amount || 0;
-          const bPrice = b.prices?.find((price) => price.interval === "year")?.unit_amount || 0;
-          return aPrice - bPrice;
-        });
-        setProducts(subscriptionProducts);
+        // Client-side role filter (not a `!= null` Firestore query) avoids
+        // the composite-index requirement (see firestore.indexes.json).
+        setProducts(subscriptionProducts(await getCatalog()));
       } catch (error) {
         console.error("Failed to fetch subscription products:", error);
         setError(true);

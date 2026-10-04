@@ -1,7 +1,7 @@
 "use client";
 
-import { payments } from "@/lib/firebase";
-import { getProducts, Product } from "@invertase/firestore-stripe-payments";
+import { getCatalog, oneTimeProducts } from "@/lib/catalog";
+import { Product } from "@invertase/firestore-stripe-payments";
 import { use, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -27,11 +27,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const allProducts = await getProducts(payments, {
-          includePrices: true,
-          activeOnly: true,
-        });
-        const oneTime = allProducts.filter((p) => !p.metadata.firebaseRole);
+        const oneTime = oneTimeProducts(await getCatalog());
         const found = oneTime.find((p) => p.id === id) ?? null;
         setProduct(found);
         setRelated(oneTime.filter((p) => p.id !== id).slice(0, 3));
@@ -92,7 +88,6 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
               height={600}
               className="aspect-[4/3] w-full rounded-xl border border-white/10 object-cover"
               sizes="(max-width: 768px) 100vw, 50vw"
-              unoptimized
               priority
             />
           ) : (
@@ -111,7 +106,6 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                   height={90}
                   className="h-20 w-28 rounded-lg border border-white/10 object-cover"
                   sizes="112px"
-                  unoptimized
                 />
               ))}
             </div>

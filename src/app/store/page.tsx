@@ -1,8 +1,8 @@
 "use client";
 
-import { payments } from "@/lib/firebase";
+import { getCatalog, oneTimeProducts } from "@/lib/catalog";
 import ProductCard from "../../components/ProductCard";
-import { getProducts, Product } from "@invertase/firestore-stripe-payments";
+import type { Product } from "@invertase/firestore-stripe-payments";
 import { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import { Button } from "../../components/ui/Button";
@@ -27,12 +27,7 @@ const StorePage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const allProducts = await getProducts(payments, {
-          includePrices: true,
-          activeOnly: true,
-        });
-        const oneTimeProducts = allProducts.filter((product) => !product.metadata.firebaseRole);
-        setProducts(oneTimeProducts);
+        setProducts(oneTimeProducts(await getCatalog()));
       } catch (error) {
         console.error("Failed to fetch store products:", error);
         setError(true);

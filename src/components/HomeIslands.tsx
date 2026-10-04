@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { getProducts, Product } from "@invertase/firestore-stripe-payments";
+import type { Product } from "@invertase/firestore-stripe-payments";
 import { useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
-import { payments } from "@/lib/firebase";
+import { getCatalog, oneTimeProducts } from "@/lib/catalog";
 import { useUser } from "@/lib/UserContext";
 import { Button } from "./ui/Button";
 import { CardSkeletonGrid } from "./ui/ShopBits";
@@ -32,11 +32,7 @@ export function FeaturedProducts() {
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
-        const allProducts = await getProducts(payments, {
-          includePrices: true,
-          activeOnly: true,
-        });
-        setProducts(allProducts.filter((product) => !product.metadata.firebaseRole).slice(0, 3));
+        setProducts(oneTimeProducts(await getCatalog()).slice(0, 3));
       } catch (error) {
         console.error("Failed to fetch featured products:", error);
         setProducts([]);
